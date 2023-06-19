@@ -1,9 +1,9 @@
 .cards-flex {
   display: flex;
-  justify-content: center;
+  gap: 9px;
   align-items: center;
   flex-wrap: wrap;
-  padding: 1rem 3rem;
+  padding:1rem 3rem;
 }
 .card-box {
   margin: 1rem;

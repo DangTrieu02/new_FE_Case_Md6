@@ -7,6 +7,8 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import "./styles.css";
 import Register from "../../page/user/register";
 import Login from "../../page/user/login";
+import KeepMountedModal from "../../page/user/Modal";
+import { useState } from "react";
 
 export default function BasicMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -17,6 +19,11 @@ export default function BasicMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [openModal,setOpenModal]= useState(false);
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  }
 
   return (
     <div>
@@ -48,10 +55,13 @@ export default function BasicMenu() {
         }}
       >
         <MenuItem className="menu-items">
-          <Register/>
+          
         </MenuItem>
         <MenuItem  className="menu-items">
-          <Login/>
+         
+        </MenuItem>
+        <MenuItem  className="menu-items">
+          <button onClick={handleOpenModal}>abc</button>
         </MenuItem>
         <div
           style={{
@@ -70,6 +80,7 @@ export default function BasicMenu() {
           Help
         </MenuItem>
       </Menu>
+      <KeepMountedModal openModal={openModal} setOpenModal={setOpenModal}/>
     </div>
   );
 }

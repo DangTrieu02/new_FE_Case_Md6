@@ -7,6 +7,7 @@ import Login from './login';
 import Register from './register';
 import { useState } from 'react';
 
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -35,7 +36,7 @@ export default function KeepMountedModal({ openModal, setOpenModal }) {
             >
                 <Box sx={style}>
                     {isLogin?<Register setIsLogin={setIsLogin}/>: <Login setIsLogin={setIsLogin} setOpenModal={setOpenModal}/>}
-                    
+
                     
                 </Box>
             </Modal>

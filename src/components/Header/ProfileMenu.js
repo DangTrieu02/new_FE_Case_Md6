@@ -1,14 +1,12 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import "./styles.css";
-import Register from "../../page/user/register";
-import Login from "../../page/user/login";
 import KeepMountedModal from "../../page/user/Modal";
 import { useState } from "react";
+
 
 export default function BasicMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -23,6 +21,9 @@ export default function BasicMenu() {
   const [openModal,setOpenModal]= useState(false);
   const handleOpenModal = () => {
     setOpenModal(true);
+  }
+  const handleMyProfile = () => {
+
   }
 
   return (
@@ -73,11 +74,11 @@ export default function BasicMenu() {
         <MenuItem onClick={handleClose} className="menu-items">
           Airbnb Your Home
         </MenuItem>
-        <MenuItem onClick={handleClose} className="menu-items">
-          Host an experience
+        <MenuItem className="menu-items">
+            my profile
         </MenuItem>
         <MenuItem onClick={handleClose} className="menu-items">
-          Help
+            Log out
         </MenuItem>
       </Menu>
       <KeepMountedModal openModal={openModal} setOpenModal={setOpenModal}/>

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Header from '../components/Header'
 import Cards from '../components/Cards';
 import { list, list2 } from '../assets/cards-list';
 import Filter from './../components/Filter/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllHome } from '../service/homeService';
+
 
 function HomePage() {
   const homes = useSelector(({ home }) => {
@@ -26,7 +27,7 @@ function HomePage() {
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
       />
-      { homes && <Cards list={homes} />}
+        {selectedFilter === 0 ? <Cards list={list} /> : <Cards list={list2} />}
     </>
   )
 }

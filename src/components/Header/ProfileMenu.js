@@ -67,11 +67,11 @@ export default function BasicMenu() {
         <MenuItem onClick={handleClose} className="menu-items">
           Airbnb Your Home
         </MenuItem>
+
+            <MyProfile />
+
         <MenuItem onClick={handleClose} className="menu-items">
-          Host an experience
-        </MenuItem>
-        <MenuItem onClick={handleClose} className="menu-items">
-          Help
+            Log out
         </MenuItem>
       </Menu>
       <KeepMountedModal openModal={openModal} setOpenModal={setOpenModal}/>

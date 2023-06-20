@@ -54,14 +54,8 @@ export default function BasicMenu() {
           },
         }}
       >
-        <MenuItem className="menu-items">
-          
-        </MenuItem>
         <MenuItem  className="menu-items">
-         
-        </MenuItem>
-        <MenuItem  className="menu-items">
-          <button onClick={handleOpenModal}>abc</button>
+          <button style={{border:"none"}}  onClick={handleOpenModal}>login/register</button>
         </MenuItem>
         <div
           style={{

@@ -1,56 +1,67 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
-import swal from "sweetalert";
-import { ErrorMessage, Field, Formik, Form } from "formik";
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import swal from 'sweetalert';
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
-const validateSchema = Yup.object().shape({
-    username: Yup.string()
+const validationSchema = yup.object({
+    username: yup.string()
         .min(6, "Needs to be between 6 and 12 characters long")
         .max(32, "Needs to be between 6 and 12 characters long")
         .matches(/^[a-zA-Z0-9]+$/, "Accounts can't contain special characters and spaces.")
         .required("required"),
-    password: Yup.string()
+    password: yup.string()
         .min(6, "Needs to be between 6 and 32 characters long")
         .max(32, "Needs to be between 6 and 32 characters long")
         .matches(/^[a-zA-Z0-9]+$/, "Password can't contain special characters and spaces.")
         .required("required"),
-    confirmPassword: Yup.string()
+    confirmPassword: yup.string()
         .min(6, "Needs to be between 6 and 32 characters long")
         .max(32, "Needs to be between 6 and 32 characters long")
-        .oneOf([Yup.ref('password')], "confirmPassword don't match.")
+        .oneOf([yup.ref('password')], "confirmPassword don't match.")
         .required("required"),
-    fullName: Yup.string()
+    fullName: yup.string()
         .min(4, "Needs to be between 4 and 32 characters long")
         .max(32, "Needs to be between 4 and 32 characters long")
         .required("required"),
-    phoneNumber: Yup.string()
+    phoneNumber: yup.string()
         .min(9, "Needs to be between 9 and 12 characters long")
         .max(12, "Needs to be between 9 and 12 characters long")
         .required("required"),
-})
+});
 
-export default function Register({setIsLogin}) {
+function Copyright(props) {
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://mui.com/">
+                Your Website
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
 
+// TODO remove, this demo shouldn't need to reset the theme.
 
-    const navigate = useNavigate()
+const defaultTheme = createTheme();
+
+export default function Register({ setIsLogin }) {
     const handleRegister = async (values) => {
         axios.post('http://localhost:3001/users/register', values).then((response) => {
             if (response.status == 209) {
@@ -67,115 +78,125 @@ export default function Register({setIsLogin}) {
                     icon: "success",
                     button: "Close",
                 });
-                navigate("/");
+                setIsLogin(false);
             }
         })
 
     };
 
+    const formik = useFormik({
+        initialValues: {
+            username: '',
+            password: '',
+            fullName: '',
+            confirmPassword: '',
+            phoneNumber: ''
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            handleRegister(values)
+        },
+    });
+
     return (
-        < >
-            <section className="ftco-section">
-                <div className="login-container">
-                    <div className="row justify-content-center">
-                        <div className="col-md-6 text-center mb-5">
-                            <h2 className="heading-section">Register</h2>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center">
-                        <div className="col-md-6 col-lg-4">
-                            <div className="login-wrap p-0">
-                                <h3 className="mb-4 text-center">Sign up for an account</h3>
-                                <Formik
-                                    initialValues={{
-                                        username: "",
-                                        password: "",
-                                        confirmPassword: "",
-                                        fullName: "",
-                                        phoneNumber: ""
-                                    }}
-                                    validationSchema={validateSchema}
-                                    onSubmit={(values) => {
-                                        handleRegister(values)
-                                    }}
-                                >
-                                    <Form action="#" className="signin-form">
-                                        <div className="form-group">
-                                            <Field type="text" className="form-control-login " name={"username"}
-                                                placeholder="Username" required />
-                                            <div className="text-light">
-                                                <ErrorMessage name={"username"}></ErrorMessage>
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <Field type="text" className="form-control-login " name={"fullName"}
-                                                placeholder="Full Name" required />
-                                            <alert className="text-light-">
-                                                <ErrorMessage name={"fullName"}></ErrorMessage>
-                                            </alert>
-                                        </div>
-                                        <div className="form-group">
-                                            <Field id="password-field" name={"password"} type="password"
-                                                className="form-control-login " placeholder="Password" required />
-                                            <alert className="text-light">
-                                                <ErrorMessage name={"password"}></ErrorMessage>
-                                            </alert>
+        <ThemeProvider theme={defaultTheme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <Box noValidate sx={{ mt: 1 }}>
+                        <form onSubmit={formik.handleSubmit}>
+                            <TextField
+                                margin="normal"
+                                fullWidth
+                                label="Username"
+                                name="username"
+                                value={formik.values.username}
+                                onChange={formik.handleChange}
+                                error={formik.touched.username && Boolean(formik.errors.username)}
+                                helperText={formik.touched.username && formik.errors.username}
+                            />
+                             <TextField
+                                margin="normal"
+                                fullWidth
+                                label="Full name"
+                                name="fullName"
+                                value={formik.values.fullName}
+                                onChange={formik.handleChange}
+                                error={formik.touched.fullName && Boolean(formik.errors.fullName)}
+                                helperText={formik.touched.fullName && formik.errors.fullName}
+                            />
+                             <TextField
+                                margin="normal"
+                                fullWidth
+                                label="Password"
+                                name="password"
+                                type='password'
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                error={formik.touched.password && Boolean(formik.errors.password)}
+                                helperText={formik.touched.password && formik.errors.password}
+                            />
+                             <TextField
+                                margin="normal"
+                                fullWidth
+                                label="Confirm password"
+                                name="confirmPassword"
+                                type='password'
+                                value={formik.values.confirmPassword}
+                                onChange={formik.handleChange}
+                                error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                                helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                            />
+                             <TextField
+                                margin="normal"
+                                fullWidth
+                                label="Phone number"
+                                name="phoneNumber"
+                                type='number'
+                                value={formik.values.phoneNumber}
+                                onChange={formik.handleChange}
+                                error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                                helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Sign In
+                            </Button>
 
-                                        </div>
-                                        <div className="form-group">
-                                            <Field id="password-field" name={"confirmPassword"} type="password"
-                                                className="form-control-login " placeholder="Confirm Password" required />
-                                            <alert className="text-light">
-                                                <ErrorMessage name={"confirmPassword"}></ErrorMessage>
-                                            </alert>
-                                        </div>
-                                        <div className="form-group">
-                                            <Field type="number" className="form-control-login " name={"phoneNumber"}
-                                                placeholder="Phone Number" required />
-                                            <alert className="text-light">
-                                                <ErrorMessage name={"phoneNumber"}></ErrorMessage>
-                                            </alert>
-                                        </div>
-                                        <div className="form-group">
-                                            <Field type="select" as="select" name="role"
-                                                className="form-control-login" placeholder="role" required>
-                                                <option style={{ color: "black" }} value={"user"}>User</option>
-                                                <option style={{ color: "black" }} value={"owner"}>Owner</option>
-                                            </Field>
-                                        </div>
-                                        <div className="form-group">
-                                            <button type="submit"
-                                                className="form-control-login  btn btn-primary submit px-3">Register
-                                            </button>
-                                        </div>
-                                        <div className="form-group d-md-flex">
-                                            <div className="w-50">
-                                                <label className="checkbox-wrap checkbox-primary">Remember Me
-                                                    <input type="checkbox" checked />
-                                                    <span className="checkmark"></span>
-                                                </label>
-                                            </div>
-                                            <div className="w-50 text-md-right">
-                                                <a href="#" style={{ color: '#fbceb5' }}>Forgot Password</a>
-                                            </div>
-                                        </div>
-                                    </Form>
-                                </Formik>
-
-                                <p className="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
-                                <div className="social d-flex text-center">
-                                    <a href="#" className="px-2 py-2 mr-md-1 rounded"><span
-                                        className="ion-logo-facebook mr-2"></span> Google Login</a>
-                                   <button
-                                        className="ion-logo-twitter mr-2" onClick={()=>{
-                                            setIsLogin(false);   
-                                        }}>Login</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </>
+                        </form>
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="#" variant="body2">
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item >
+                                <Link onClick={() => { setIsLogin(false) }} variant="body2">
+                                    Don't have an account? Sign Up
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
+                <Copyright sx={{ mt: 2, mb: 1 }} />
+            </Container>
+        </ThemeProvider>
     );
 }

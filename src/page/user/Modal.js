@@ -34,9 +34,7 @@ export default function KeepMountedModal({ openModal, setOpenModal }) {
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    {isLogin?<Register setIsLogin={setIsLogin}/>: <Login setIsLogin={setIsLogin} setOpenModal={setOpenModal}/>}
-                    
-                    
+                    {isLogin ? <Register setIsLogin={setIsLogin}/> : <Login setIsLogin={setIsLogin} setOpenModal={setOpenModal}/>}
                 </Box>
             </Modal>
         </div>

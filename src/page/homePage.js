@@ -22,13 +22,7 @@ function HomePage() {
 
   return (
     <>
-        {console.log(homes)}
-      <Header />
-      <Filter
-        selectedFilter={selectedFilter}
-        setSelectedFilter={setSelectedFilter}
-      />
-        {selectedFilter === 0 ? <Cards list={homes} /> : <Cards list={list2} />}
+
     </>
   )
 }

@@ -128,7 +128,7 @@ export default function Register({ setIsLogin }) {
                                 error={formik.touched.username && Boolean(formik.errors.username)}
                                 helperText={formik.touched.username && formik.errors.username}
                             />
-                             <TextField
+                            <TextField
                                 margin="normal"
                                 fullWidth
                                 label="Full name"
@@ -138,7 +138,7 @@ export default function Register({ setIsLogin }) {
                                 error={formik.touched.fullName && Boolean(formik.errors.fullName)}
                                 helperText={formik.touched.fullName && formik.errors.fullName}
                             />
-                             <TextField
+                            <TextField
                                 margin="normal"
                                 fullWidth
                                 label="Password"
@@ -149,7 +149,7 @@ export default function Register({ setIsLogin }) {
                                 error={formik.touched.password && Boolean(formik.errors.password)}
                                 helperText={formik.touched.password && formik.errors.password}
                             />
-                             <TextField
+                            <TextField
                                 margin="normal"
                                 fullWidth
                                 label="Confirm password"
@@ -160,7 +160,7 @@ export default function Register({ setIsLogin }) {
                                 error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
                                 helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                             />
-                             <TextField
+                            <TextField
                                 margin="normal"
                                 fullWidth
                                 label="Phone number"
@@ -171,6 +171,16 @@ export default function Register({ setIsLogin }) {
                                 error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
                                 helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                             />
+                            <select
+                                id="role"
+                                name="role"
+                                value={formik.values.role}
+                                onChange={formik.handleChange}
+                                required
+                            >
+                                <option style={{ color: "black" }} value="user">user</option>
+                                <option style={{ color: "black" }} value="owner">owner</option>
+                            </select>
                             <Button
                                 type="submit"
                                 fullWidth

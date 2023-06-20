@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
 
-function Card({ card }) {
+function Card({card}) {
   return (
     <div className="card-box">
       <Swiper
@@ -20,21 +20,21 @@ function Card({ card }) {
         modules={[Pagination, Navigation]}
         className="swiper-container"
       >
-        {card.imgSrc.map((src, i) => (
+        {card.image.map((src, i) => (
           <SwiperSlide key={i}>
-            <img src={src} className="card-img" />
+            <img src={src.image} className="card-img" />
           </SwiperSlide>
         ))}
       </Swiper>
       <div className="card-info-flex">
-        <h3 className="card-title">{card.title}</h3>
+        <h3 className="card-title">{card.floorArea}</h3>
         <div className="card-rating">
           <StarRateRoundedIcon />
-          <p>{card.rating}</p>
+          <p>{card.status}</p>
         </div>
       </div>
-      <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.desc}</p>
-      <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.date}</p>
+      <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.nameHome}</p>
+      <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.address}</p>
       <p style={{ margin: "0.2rem", fontSize: "1rem", color: "var(--black" }}>
         <span style={{ fontWeight: "600" }}>₹{card.price}</span> night
       </p>

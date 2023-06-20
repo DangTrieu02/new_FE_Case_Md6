@@ -6,11 +6,14 @@ import LanguageIcon from "@mui/icons-material/Language";
 import BasicMenu from "./ProfileMenu";
 import SimpleBottomNavigation from "./BottomNav";
 import MobileSearchBar from "../MobileSearchBar";
+import {Link} from "@mui/material";
 
 function Header() {
   return (
     <div className="navbar">
-      <img src={logo} alt="logo" className="navbar-logo" />
+        <Link href="/">
+      <img src={logo} alt="logo" className="navbar-logo"/>
+        </Link>
       <div className="search-bar">
         <div className="search-bar-text">Anywhere</div>
         <div className="search-bar-text">Any Week</div>

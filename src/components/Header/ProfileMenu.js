@@ -8,6 +8,7 @@ import "./styles.css";
 import KeepMountedModal from "../../page/user/Modal";
 import { useState } from "react";
 import MyProfile from "../../page/user/myProfile";
+import ChangePasswordModal from "../../page/user/change-password";
 
 export default function BasicMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -66,9 +67,10 @@ export default function BasicMenu() {
         <MenuItem onClick={handleClose} className="menu-items">
           Airbnb Your Home
         </MenuItem>
-
             <MyProfile />
-
+          <MenuItem>
+              <ChangePasswordModal/>
+          </MenuItem>
         <MenuItem onClick={handleClose} className="menu-items">
             Log out
         </MenuItem>

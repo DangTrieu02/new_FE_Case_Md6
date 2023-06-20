@@ -64,7 +64,7 @@ export default function Login({setIsLogin}) {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="User Name"
               name="email"
               autoComplete="email"
               autoFocus

@@ -19,7 +19,7 @@ function Filter({ selectedFilter, setSelectedFilter }) {
       <Box
         sx={{
           flexGrow: 1,
-          maxWidth: { xs: 150, sm: 1200 },
+          maxWidth: { xs: 150, sm: 1300 },
           bgcolor: 'background.paper',
         }}
       >

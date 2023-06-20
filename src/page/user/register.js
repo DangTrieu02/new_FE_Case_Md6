@@ -114,7 +114,7 @@ export default function Register({ setIsLogin }) {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Register
                     </Typography>
                     <Box noValidate sx={{ mt: 1 }}>
                         <form onSubmit={formik.handleSubmit}>
@@ -189,7 +189,7 @@ export default function Register({ setIsLogin }) {
                             </Grid>
                             <Grid item >
                                 <Link onClick={() => { setIsLogin(false) }} variant="body2">
-                                    Don't have an account? Sign Up
+                                    Don't have an account? Login
                                 </Link>
                             </Grid>
                         </Grid>

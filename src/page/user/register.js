@@ -199,7 +199,7 @@ export default function Register({ setIsLogin }) {
                             </Grid>
                             <Grid item >
                                 <Link onClick={() => { setIsLogin(false) }} variant="body2">
-                                    Don't have an account? Sign Up
+                                    Don't have an account? Login
                                 </Link>
                             </Grid>
                         </Grid>

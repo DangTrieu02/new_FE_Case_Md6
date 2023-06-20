@@ -6,6 +6,7 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import "./styles.css";
 import KeepMountedModal from "../../page/user/Modal";
 import { useState } from "react";
+import MyProfile from "../../page/user/myProfile";
 
 
 export default function BasicMenu() {
@@ -21,9 +22,6 @@ export default function BasicMenu() {
   const [openModal,setOpenModal]= useState(false);
   const handleOpenModal = () => {
     setOpenModal(true);
-  }
-  const handleMyProfile = () => {
-
   }
 
   return (
@@ -56,10 +54,10 @@ export default function BasicMenu() {
         }}
       >
         <MenuItem className="menu-items">
-          
+
         </MenuItem>
         <MenuItem  className="menu-items">
-         
+
         </MenuItem>
         <MenuItem  className="menu-items">
           <button onClick={handleOpenModal}>abc</button>
@@ -74,9 +72,9 @@ export default function BasicMenu() {
         <MenuItem onClick={handleClose} className="menu-items">
           Airbnb Your Home
         </MenuItem>
-        <MenuItem className="menu-items">
-            my profile
-        </MenuItem>
+
+            <MyProfile />
+
         <MenuItem onClick={handleClose} className="menu-items">
             Log out
         </MenuItem>

@@ -1,7 +1,12 @@
+.MuiTabs-flexContainer .css-heg063-MuiTabs-flexContainer button{
+ size: 3px;
+}
+
 .cards-flex {
   display: flex;
   gap: 9px;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   padding:1rem 3rem;
 }

@@ -19,13 +19,11 @@ const style = {
 };
 
 export default function KeepMountedModal({ openModal, setOpenModal }) {
-
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
     const [isLogin, setIsLogin] = useState(true)
     return (
         <div>
-
             <Modal
                 keepMounted
                 open={openModal}

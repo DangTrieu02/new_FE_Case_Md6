@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Header from '../components/Header'
 import Cards from '../components/Cards';
 import { list, list2 } from '../assets/cards-list';
@@ -8,26 +8,27 @@ import { getAllHome } from '../service/homeService';
 
 
 function HomePage() {
+    const [selectedFilter, setSelectedFilter] = useState(0);
   const homes = useSelector(({ home }) => {
     console.log(home,4444);
     return home.list
   })
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(getAllHome())
-  }, []);
+    useEffect(()=>{
+        dispatch(getAllHome())
+    },[])
 
-  const [selectedFilter, setSelectedFilter] = useState(0);
 
   return (
     <>
+        {console.log(homes)}
       <Header />
       <Filter
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
       />
-        {selectedFilter === 0 ? <Cards list={list} /> : <Cards list={list2} />}
+        {selectedFilter === 0 ? <Cards list={homes} /> : <Cards list={list2} />}
     </>
   )
 }

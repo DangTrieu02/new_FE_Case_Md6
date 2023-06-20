@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
 
 function Card({card}) {
+    console.log(card)
   return (
     <div className="card-box">
       <Swiper
@@ -20,9 +21,9 @@ function Card({card}) {
         modules={[Pagination, Navigation]}
         className="swiper-container"
       >
-        {card.image.map((src, i) => (
+        {card.imageSrc && card.imageSrc.map((src, i) => (
           <SwiperSlide key={i}>
-            <img src={src.image} className="card-img" />
+            <img src={src} className="card-img"  alt={"abc"}/>
           </SwiperSlide>
         ))}
       </Swiper>

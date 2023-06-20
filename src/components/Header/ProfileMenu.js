@@ -5,10 +5,9 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import "./styles.css";
-import Register from "../../page/user/register";
-import Login from "../../page/user/login";
 import KeepMountedModal from "../../page/user/Modal";
 import { useState } from "react";
+import MyProfile from "../../page/user/myProfile";
 
 export default function BasicMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);

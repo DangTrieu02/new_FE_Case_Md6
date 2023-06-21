@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllHome } from '../service/homeService';
 
 function HomePage() {
+
   const homes = useSelector(({ home }) => {
     return home.list
   })
@@ -19,6 +20,7 @@ function HomePage() {
 
   return (
     <>
+    {console.log(homes,"user")}
       <Header />
       <Filter
         selectedFilter={selectedFilter}

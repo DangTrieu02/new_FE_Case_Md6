@@ -46,18 +46,14 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function Login({setIsLogin}) {
+export default function Login({setIsLogin,setOpenModal}) {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleLogin = async (values) => {
     await dispatch(login(values)).then((e) => {
-      if (e.payload && e.payload.role) {
-        const { role } = e.payload;
-        if (role === "owner") {
-          navigate("/owner");
-        } else {
-          navigate("/home");
-        }
+      setOpenModal(false)
+      if (e.payload && e.payload.role) {   
+
       } else if (e.payload === "user not found") {
         swal({
           title: "User not found!",

@@ -6,6 +6,23 @@ export const getAllHome = createAsyncThunk("homes/getAllHome",async()=>{
     return res.data
 })
 
-export const createHome = createAsyncThunk("homes/createHome",async()=>{
-    
+export const createHome = createAsyncThunk("homes/createHome",async(data)=>{
+    const res= await customAxios.post("homes/",data)
+    return res.data
+});
+
+export const getHomeByUser = createAsyncThunk(`homes/getHomeByUser`,async(id)=>{
+    const res= await customAxios.get(`homes/user/${id}`)
+    console.log(res.data,id,"homeservice")
+    return res.data
+});
+
+// export const getHomeById = createAsyncThunk(`homes/getHomeById`,async(id)=>{
+//     const res= await customAxios.put(`homes/${id}`)
+//     return res.data
+// });
+
+export const getHomeById = (async(id)=>{
+    const res= await customAxios.put(`homes/${id}`)
+    return res.data
 });

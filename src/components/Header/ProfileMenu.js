@@ -9,6 +9,9 @@ import Register from "../../page/user/register";
 import Login from "../../page/user/login";
 import KeepMountedModal from "../../page/user/Modal";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import OwnerPage from "../../page/owner/showHome";
+import { Link } from "react-router-dom";
 
 export default function BasicMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -24,6 +27,7 @@ export default function BasicMenu() {
   const handleOpenModal = () => {
     setOpenModal(true);
   }
+
 
   return (
     <div>
@@ -54,8 +58,8 @@ export default function BasicMenu() {
           },
         }}
       >
-        <MenuItem  className="menu-items">
-          <button style={{border:"none"}}  onClick={handleOpenModal}>login/register</button>
+        <MenuItem  className="menu-items"  onClick={handleOpenModal}>
+         login/register
         </MenuItem>
         <div
           style={{
@@ -64,7 +68,7 @@ export default function BasicMenu() {
             width: "100%",
           }}
         />
-        <MenuItem onClick={handleClose} className="menu-items">
+        <MenuItem component={Link} to="/owner" className="menu-items">
           Airbnb Your Home
         </MenuItem>
         <MenuItem onClick={handleClose} className="menu-items">
@@ -73,7 +77,11 @@ export default function BasicMenu() {
         <MenuItem onClick={handleClose} className="menu-items">
           Help
         </MenuItem>
+        <MenuItem onClick={handleClose} className="menu-items">
+          
+        </MenuItem>
       </Menu>
+     
       <KeepMountedModal openModal={openModal} setOpenModal={setOpenModal}/>
     </div>
   );

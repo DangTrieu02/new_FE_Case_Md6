@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Login from './login';
 import Register from './register';
-import { useState } from 'react';
+import {useState} from 'react';
 
 
 const style = {
@@ -19,7 +19,7 @@ const style = {
     p: 4,
 };
 
-export default function KeepMountedModal({ openModal, setOpenModal }) {
+export default function KeepMountedModal({openModal, setOpenModal}) {
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
     const [isLogin, setIsLogin] = useState(true)
@@ -33,9 +33,8 @@ export default function KeepMountedModal({ openModal, setOpenModal }) {
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    {isLogin?<Register setIsLogin={setIsLogin}/>: <Login setIsLogin={setIsLogin} setOpenModal={setOpenModal}/>}
-
-                    
+                    {isLogin ? <Register setIsLogin={setIsLogin}/> :
+                        <Login setIsLogin={setIsLogin} setOpenModal={setOpenModal}/>}
                 </Box>
             </Modal>
         </div>

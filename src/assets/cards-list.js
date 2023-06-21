@@ -49,7 +49,8 @@ export const list2 = [
   },
 ];
 
-export const list = [
+export const
+     list = [
   {
     rating: "4",
     desc: "Beach and Sunset Views",

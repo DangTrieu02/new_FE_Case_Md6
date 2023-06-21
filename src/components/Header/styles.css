@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 3rem;
+  padding: 1rem 5rem;
   position: sticky;
   top: 0;
   background-color: var(--white);
@@ -94,7 +94,9 @@
 .bottom-nav {
   display: none;
 }
-
+.links-label button{
+  font-size: 10px !important;
+}
 @media only screen and (max-width: 800px) {
   .search-bar,
   .airbnb-your-home {
@@ -120,5 +122,54 @@
     width: 100%;
     border-top: 1px solid var(--grey);
     box-shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%);
+  }
+}
+.filter-div {
+
+  padding: 1rem 3rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.links-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2rem;
+  opacity: 0.5;
+  border-bottom: 1px solid var(--white);
+  min-width: 85px;
+}
+
+.links-box:hover,
+.selected-box {
+  opacity: 1;
+  border-bottom: 1px solid var(--black);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.links-img {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
+.links-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--font-grey);
+}
+
+.selected-label {
+  color: var(--black);
+}
+@media only screen and (max-width: 800px) {
+  .filter-div {
+    padding: 0.5rem;
+    padding-top: 1.5rem;
   }
 }

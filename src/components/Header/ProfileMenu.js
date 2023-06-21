@@ -55,7 +55,7 @@ export default function BasicMenu() {
         }}
       >
         <MenuItem  className="menu-items">
-          <button style={{border:"none"}}  onClick={handleOpenModal}>login/register</button>
+          <a style={{border:"none"}}  onClick={handleOpenModal}>Login/Register</a>
         </MenuItem>
         <div
           style={{
@@ -65,9 +65,8 @@ export default function BasicMenu() {
           }}
         />
         <MenuItem onClick={handleClose} className="menu-items">
-          Airbnb Your Home
-        </MenuItem>
-            <MyProfile />
+        </MenuItem >
+          <MyProfile></MyProfile>
           <MenuItem>
               <ChangePasswordModal/>
           </MenuItem>

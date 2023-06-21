@@ -53,9 +53,9 @@ export default function ChangePasswordDialog() {
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <a variant="outlined" onClick={handleClickOpen}>
                 Change Password
-            </Button>
+            </a>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Change Password</DialogTitle>
                 <DialogContent>

@@ -14,3 +14,8 @@ export const editUser = createAsyncThunk(`users/edit-profile/`, async (data) => 
     const newUser = await customAxios.get(`users/my-profile/${data.id}`)
     return newUser.data
 })
+export const showUser = createAsyncThunk(`users/showProfile`,async(data)=>{
+    await customAxios.get(`users/showProfile`)
+    const newUser = await customAxios.get(`users/showProfile`)
+    return newUser.data
+})

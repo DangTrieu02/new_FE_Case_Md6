@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React, { useState} from "react";
 import "./myProfile.css";
 import "../../components/Header/styles.css"
 import MenuItem from "@mui/material/MenuItem";
 import Button from '@mui/material/Button';
+import { useSelector} from "react-redux";
 
 export default function MyProfile() {
     const [modal, setModal] = useState(false);
-
     const toggleModal = () => {
         setModal(!modal);
     };
@@ -15,6 +15,17 @@ export default function MyProfile() {
         document.body.classList.add('active-modal')
     } else {
         document.body.classList.remove('active-modal')
+    }
+    const user = useSelector(state => {
+        return state.user.currentUser
+    });
+
+
+
+
+
+    const handleUpdate = () => {
+
     }
 
     return (
@@ -43,32 +54,33 @@ export default function MyProfile() {
                                                             borderRadius: "50%"
                                                         }}
                                                         src="https://static-images.vnncdn.net/files/publish/2022/9/3/bien-vo-cuc-thai-binh-346.jpeg"
-                                                        className="agent-avatar img-fluid"
-                                                    />
+                                                        className="agent-avatar img-fluid" />
+
                                                     <div className="col-md-8 section-md-t3">
                                                         <div className="agent-info-box">
                                                             <div className="agent-title">
                                                                 <div className="title-box-d">
-                                                                    <h2 className="title-d">
-                                                                        AnhTran
-                                                                    </h2>
+                                                                    <p>
+                                                                        <strong>FullName: </strong>
+                                                                        <span className="color-text-a"> {user.fullName} </span>
+                                                                    </p>
                                                                 </div>
                                                             </div>
                                                             <div className="agent-content mb-3">
                                                                 <div className="info-agents color-a">
                                                                     <p>
                                                                         <strong>username: </strong>
-                                                                        <span className="color-text-a"> username </span>
+                                                                        <span className="color-text-a"> {user.username} </span>
                                                                     </p>
                                                                     <p>
                                                                         <strong>Phone: </strong>
                                                                         <span
-                                                                            className="color-text-a"> phoneNumber </span>
+                                                                            className="color-text-a"> {user.phoneNumber} </span>
                                                                     </p>
                                                                     <p>
                                                                         <strong>Role: </strong>
                                                                         <span
-                                                                            className="color-text-a"> Role </span>
+                                                                            className="color-text-a"> {user.role} </span>
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -78,7 +90,7 @@ export default function MyProfile() {
                                                 <Button variant="outlined" color="error" onClick={toggleModal}>
                                                     Exit
                                                 </Button>
-                                                <Button variant="contained">Update</Button>
+                                                <Button variant="contained" onClick={handleUpdate}>Update</Button>
                                             </div>
                                         </div>
                                     </div>

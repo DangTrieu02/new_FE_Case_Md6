@@ -19,6 +19,7 @@ function HomePage() {
     return (
         <>
             <Header />
+
             { homes && <Cards list={homes} />}
         </>
     )

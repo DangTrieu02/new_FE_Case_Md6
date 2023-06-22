@@ -11,13 +11,13 @@ const userSlice = createSlice({
     reducers:{},
     extraReducers:builder => {
         builder.addCase(login.fulfilled,(state,action)=>{
-            state.currentUser= action.payload.data
-            console.log(1)
+            state.currentUser = action.payload;
             localStorage.setItem("user",JSON.stringify(action.payload))
             localStorage.setItem("access-token",action.payload.token)
         })
         builder.addCase(loginWithGoogle.fulfilled,(state,action)=>{
-            state.currentUser= action.payload
+            console.log(action.payload)
+            state.currentUser= action.payload;
             localStorage.setItem("user",JSON.stringify(action.payload))
             localStorage.setItem("access-token",action.payload.token)
         })

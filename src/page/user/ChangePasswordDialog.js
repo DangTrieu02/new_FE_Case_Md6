@@ -1,50 +1,48 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
+import * as React from "react";
+import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import Swal from "sweetalert2";
+import Button from "@mui/material/Button";
 
 const ChangePasswordSchema = Yup.object().shape({
-    currentPassword: Yup.string().required('Old Password is required'),
+    currentPassword: Yup.string().required("Old Password is required"),
     newPassword: Yup.string()
-        .min(6, 'New Password must be at least 6 characters')
-        .required('New Password is required'),
+        .min(6, "New Password must be at least 6 characters")
+        .required("New Password is required"),
     confirmNewPassword: Yup.string()
-        .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
-        .required('Confirm New Password is required'),
+        .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
+        .required("Confirm New Password is required"),
 });
 
-export default function ChangePasswordDialog() {
+export default function ChangePasswordDialog({ handleClose }) {
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (event) => {
+        event.stopPropagation();
         setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
     };
 
     const handleSubmit = async (values) => {
         try {
-            const currentUser = JSON.parse(localStorage.getItem('user'));
+            const currentUser = JSON.parse(localStorage.getItem("user"));
             if (!currentUser) {
-                throw new Error('No user found');
+                throw new Error("No user found");
             }
-            let token = localStorage.getItem('access-token');
+            let token = localStorage.getItem("access-token");
             await axios.put(`http://localhost:3001/users/change-password`, values, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            await Swal.fire('Success', 'Password changed successfully!', 'success');
+            await Swal.fire("Success", "Password changed successfully!", "success");
             handleClose();
         } catch (error) {
             console.log(error);
@@ -53,17 +51,17 @@ export default function ChangePasswordDialog() {
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <MenuItem className="menu-items" onClick={handleClickOpen}>
                 Change Password
-            </Button>
-            <Dialog open={open} onClose={handleClose}>
+            </MenuItem>
+            <Dialog open={open} onClose={() => setOpen(false)}>
                 <DialogTitle>Change Password</DialogTitle>
                 <DialogContent>
                     <Formik
                         initialValues={{
-                            currentPassword: '',
-                            newPassword: '',
-                            confirmNewPassword: '',
+                            currentPassword: "",
+                            newPassword: "",
+                            confirmNewPassword: "",
                         }}
                         validationSchema={ChangePasswordSchema}
                         onSubmit={handleSubmit}
@@ -81,7 +79,11 @@ export default function ChangePasswordDialog() {
                                         type="password"
                                         fullWidth
                                         variant="standard"
-                                        error={Boolean(errors.currentPassword && touched.currentPassword)}
+                                        error={
+                                            Boolean(
+                                                errors.currentPassword && touched.currentPassword
+                                            )
+                                        }
                                         helperText={<ErrorMessage name="currentPassword" />}
                                     />
                                 </div>
@@ -109,12 +111,17 @@ export default function ChangePasswordDialog() {
                                         type="password"
                                         fullWidth
                                         variant="standard"
-                                        error={Boolean(errors.confirmNewPassword && touched.confirmNewPassword)}
+                                        error={
+                                            Boolean(
+                                                errors.confirmNewPassword &&
+                                                touched.confirmNewPassword
+                                            )
+                                        }
                                         helperText={<ErrorMessage name="confirmNewPassword" />}
                                     />
                                 </div>
                                 <DialogActions>
-                                    <Button onClick={handleClose}>Cancel</Button>
+                                    <Button onClick={() => setOpen(false)}>Cancel</Button>
                                     <Button variant="contained" color="primary" type="submit">
                                         Change Password
                                     </Button>

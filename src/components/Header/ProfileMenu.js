@@ -1,31 +1,53 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import * as React from "react";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import "./styles.css";
 import KeepMountedModal from "../../page/user/Modal";
-import MyProfile from "../../page/user/myProfile";
-import ChangePasswordModal from "../../page/user/change-password";
-import UploadImage from "../../page/user/upload-image";
-import ImageUploadDialog from "../../page/user/upload-image";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { GoogleLogin } from "google-login-react";
+import { useDispatch } from "react-redux";
+import { loginWithGoogle } from "../../service/userService";
+import { useEffect } from "react";
+import Button from "@mui/material/Button";
+import ChangePasswordDialog from "../../page/user/ChangePasswordDialog";
 
-export default function BasicMenu() {
-    const [anchorEl, setAnchorEl] = useState(null);
+export default function BasicMenu({ user }) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleClose = (event) => {
+        event.stopPropagation(); // Prevent menu from closing when clicking the dialog button
         setAnchorEl(null);
     };
+
+    const location = useLocation();
+    const currentPath = location.pathname;
 
     const [openModal, setOpenModal] = useState(false);
     const handleOpenModal = () => {
         setOpenModal(true);
+    };
+
+    const logout = () => {
+        localStorage.clear();
+        navigate("/");
+        handleClose();
+    };
+
+    const loginGoogle = async (values) => {
+        await dispatch(loginWithGoogle(values)).then(() => {
+            navigate("/");
+        });
     };
 
     return (
@@ -53,15 +75,25 @@ export default function BasicMenu() {
                     ".MuiPaper-root": {
                         minWidth: "200px",
                         borderRadius: "1rem",
-                        boxShadow: "0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%)",
+                        boxShadow:
+                            "0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%)",
                     },
                 }}
             >
-                <MenuItem className="menu-items">
-                    <button style={{ border: "none" }} onClick={handleOpenModal}>
-                        login/register
-                    </button>
-                </MenuItem>
+                {user && currentPath === "/" ? (
+                    <MenuItem component={Link} to="/owner" className="menu-items">
+                        Airbnb Your Home
+                    </MenuItem>
+                ) : (
+                    <MenuItem
+                        className="menu-items"
+                        component={Link}
+                        to="/"
+                        onClick={handleClose}
+                    >
+                        Home page
+                    </MenuItem>
+                )}
                 <div
                     style={{
                         height: "1px",
@@ -70,20 +102,45 @@ export default function BasicMenu() {
                     }}
                 />
                 <MenuItem onClick={handleClose} className="menu-items">
-                    Airbnb Your Home
+                    Host an experience
                 </MenuItem>
-                <MyProfile />
-                <MenuItem>
-                    <ChangePasswordModal />
-                </MenuItem>
-                <MenuItem>
-                    <ImageUploadDialog/>
-                </MenuItem>
+                {user && (
+                    <>
+                        <MenuItem onClick={handleClose} className="menu-items">
+                            <ChangePasswordDialog handleClose={handleClose} />
+                        </MenuItem>
+                        <MenuItem onClick={logout} className="menu-items">
+                            Logout
+                        </MenuItem>
+                    </>
+                )}
+                {!user && (
+                    <>
+                        <MenuItem
+                            className="menu-items"
+                            onClick={handleOpenModal}
+                        >
+                            login/register
+                        </MenuItem>
+                        <MenuItem className="menu-items">
+                            <GoogleLogin
+                                clientId="884724746848-412afcr1b3pg39o206pj5rlha8driq78.apps.googleusercontent.com"
+                                onSuccess={async (res) => {
+                                    loginGoogle(res);
+                                }}
+                                onError={(err) => console.log(err)}
+                                containerClass="<your_custom_class>"
+                            >
+                                Google Login
+                            </GoogleLogin>
+                        </MenuItem>
+                    </>
+                )}
                 <MenuItem onClick={handleClose} className="menu-items">
-                    Log out
+                    Help
                 </MenuItem>
             </Menu>
             <KeepMountedModal openModal={openModal} setOpenModal={setOpenModal} />
         </div>
-
-)}
+    );
+}

@@ -1,56 +1,61 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import customAxios from "./api";
 
-export const searchHome = createAsyncThunk("homes/searchHome", async (data) => {
-    try {
-        const res = await customAxios.get(`/homes/find-by-address?address=${data}`, {
-            headers: {
-                "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("access-token"),
-            },
-        });
-        return res.data;
-    } catch (error) {
-        throw new Error(error.message);
-    }
-});
-
 export const getAllHome = createAsyncThunk("homes/getAllHome", async () => {
-    try {
-        const res = await customAxios.get("homes");
-        return res.data;
-    } catch (error) {
-        throw new Error(error.message);
-    }
+    const res = await customAxios.get("homes/");
+    return res.data;
 });
 
-export const createHome = createAsyncThunk("homes/createHome", async (homeData) => {
-    try {
-        const res = await customAxios.post("homes", homeData, {
-            headers: {
-                "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("access-token"),
-            },
-        });
+export const createHome = createAsyncThunk(
+    "homes/createHome",
+    async (data) => {
+        const res = await customAxios.post("homes/", data);
         return res.data;
-    } catch (error) {
-        throw new Error(error.message);
     }
+);
+
+export const getHomeByUser = createAsyncThunk(
+    `homes/getHomeByUser`,
+    async (id) => {
+        const res = await customAxios.get(`homes/user/${id}`);
+        console.log(res.data, id, "homeservice");
+        return res.data;
+    }
+);
+
+export const getHomeById = createAsyncThunk(`homes/getHomeById`, async (id) => {
+    const res = await customAxios.put(`homes/${id}`);
+    return res.data;
 });
 
-export const findByCategoryId = createAsyncThunk(
-    "homes/findByCategoryId",
+export const getHomeByCategory = createAsyncThunk(
+    `homes/getHomeByCategory`,
     async (categoryId) => {
-        try {
-            const res = await customAxios.get(`/homes/categories/${categoryId}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    authorization: "Bearer " + localStorage.getItem("access-token"),
-                },
-            });
-            return res.data;
-        } catch (error) {
-            throw new Error(error.message);
-        }
+        const res = await customAxios.get(`homes/categories/${categoryId}`);
+        return res.data;
+    }
+);
+
+export const getHomeByPrice = createAsyncThunk(
+    `homes/getHomeByPrice`,
+    async (price) => {
+        const res = await customAxios.get(`homes/price?price=${price}`);
+        return res.data;
+    }
+);
+
+export const getHomeByName = createAsyncThunk(
+    `homes/getHomeByName`,
+    async (name) => {
+        const res = await customAxios.get(`homes/filter?name=${name}`);
+        return res.data;
+    }
+);
+
+export const getHomeByStatus = createAsyncThunk(
+    `homes/getHomeByStatus`,
+    async (status) => {
+        const res = await customAxios.get(`homes/status?status=${status}`);
+        return res.data;
     }
 );

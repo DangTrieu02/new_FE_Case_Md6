@@ -3,17 +3,16 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Login from './login';
-import Register from './register';
 import { useState } from 'react';
-
+import CreateHome from './createHome';
 
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 600,
+    width: 1000,
+    height:700,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
@@ -22,7 +21,7 @@ const style = {
 export default function KeepMountedModal({ openModal, setOpenModal }) {
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
-    const [isLogin, setIsLogin] = useState(true)
+    const [isCreate, setIsCreate] = useState(true)
     return (
         <div>
             <Modal
@@ -33,9 +32,7 @@ export default function KeepMountedModal({ openModal, setOpenModal }) {
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    {isLogin?<Register setIsLogin={setIsLogin}/>: <Login setIsLogin={setIsLogin} setOpenModal={setOpenModal}/>}
-
-                    
+                    <CreateHome setOpenModal={setOpenModal}/>
                 </Box>
             </Modal>
         </div>

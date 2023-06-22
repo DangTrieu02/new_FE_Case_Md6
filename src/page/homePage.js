@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
-import Cards from "../components/Cards";
-import Filter from "./../components/Filter/index";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllHome, findByCategoryId, searchHome } from "../service/homeService";
+import React, { useEffect, useState } from 'react';
+import Header from '../components/Header';
+import Cards from '../components/Cards';
+import Filter from './../components/Filter/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllHome, getHomeByCategory, getHomeByName } from '../service/homeService';
 
 function HomePage() {
     const homes = useSelector(({ home }) => home.list);
@@ -11,39 +11,20 @@ function HomePage() {
 
     useEffect(() => {
         dispatch(getAllHome());
-    }, [dispatch]);
+    }, []);
 
     const [selectedFilter, setSelectedFilter] = useState(0);
-    const [showFilteredHomes, setShowFilteredHomes] = useState(false);
-    const [address, setAddress] = useState("");
-    const [minPrice, setMinPrice] = useState("");
-    const [maxPrice, setMaxPrice] = useState("");
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const handleFilterToggle = () => {
-        setShowFilteredHomes(!showFilteredHomes);
-    };
+    const handleSearch = async (event) => {
+        event.preventDefault();
 
-    useEffect(() => {
-        if (showFilteredHomes) {
-            dispatch(findByCategoryId(selectedFilter));
+        if (selectedFilter === 0) {
+            // Find homes by name
+            dispatch(getHomeByName(searchQuery));
         } else {
-            dispatch(getAllHome());
-        }
-    }, [showFilteredHomes, selectedFilter, dispatch]);
-
-    const handleSearch = () => {
-        if (address !== "") {
-            dispatch(searchHome(address));
-        }
-    };
-
-    const handlePriceFilter = () => {
-        if (minPrice !== "" && maxPrice !== "") {
-            // Perform the price range filtering
-            const filteredHomes = homes.filter(
-                (home) => home.price >= minPrice && home.price <= maxPrice
-            );
-            // Dispatch an action or set the filtered homes in state
+            // Find homes by category
+            dispatch(getHomeByCategory(selectedFilter));
         }
     };
 
@@ -53,16 +34,8 @@ function HomePage() {
             <Filter
                 selectedFilter={selectedFilter}
                 setSelectedFilter={setSelectedFilter}
-                showFilteredHomes={showFilteredHomes}
-                handleFilterToggle={handleFilterToggle}
-                address={address}
-                setAddress={setAddress}
-                minPrice={minPrice}
-                setMinPrice={setMinPrice}
-                maxPrice={maxPrice}
-                setMaxPrice={setMaxPrice}
-                handleSearch={handleSearch}
-                handlePriceFilter={handlePriceFilter}
+                onSearch={handleSearch}
+                onSearchQueryChange={setSearchQuery}
             />
             {homes && <Cards list={homes} />}
         </>

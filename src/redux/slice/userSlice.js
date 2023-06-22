@@ -16,6 +16,7 @@ const userSlice = createSlice({
             localStorage.setItem("access-token",action.payload.token)
         })
         builder.addCase(loginWithGoogle.fulfilled,(state,action)=>{
+            console.log(action.payload)
             state.currentUser= action.payload;
             localStorage.setItem("user",JSON.stringify(action.payload))
             localStorage.setItem("access-token",action.payload.token)

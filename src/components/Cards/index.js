@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Card from "./card";
 import "./styles.css";
 function Cards({ list }) {
-  const [openModal,setOpenModal]= useState(false);
   return (
     <>
     <div className="cards-flex">

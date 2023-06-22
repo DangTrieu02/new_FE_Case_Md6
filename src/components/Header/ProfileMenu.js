@@ -1,34 +1,51 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import "./styles.css";
-import Register from "../../page/user/register";
-import Login from "../../page/user/login";
 import KeepMountedModal from "../../page/user/Modal";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import OwnerPage from "../../page/owner/showHome";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { GoogleLogin } from 'google-login-react';
+import { useDispatch } from "react-redux";
+import { loginWithGoogle } from "../../service/userService";
+import { useEffect } from "react";
 
-export default function BasicMenu() {
+
+export default function BasicMenu({ user }) {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const [openModal,setOpenModal]= useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
     setOpenModal(true);
   }
+  const logout = () => {
+    localStorage.clear();
+    navigate('/')
+    handleClose()
+  }
+  const loginGoogle = async (values) => {
+    await dispatch(loginWithGoogle(values)).then(() => {
+      navigate("/");
+    })
 
-
+  }
   return (
     <div>
       <div
@@ -58,9 +75,23 @@ export default function BasicMenu() {
           },
         }}
       >
-        <MenuItem  className="menu-items"  onClick={handleOpenModal}>
-         login/register
-        </MenuItem>
+        {
+          user && currentPath === "/" ? (
+
+            <MenuItem component={Link} to="/owner" className="menu-items">
+              Airbnb Your Home
+            </MenuItem>
+          ) : (
+            <MenuItem
+              className="menu-items"
+              component={Link}
+              to="/"
+              onClick={handleClose}
+            >
+              Home page
+            </MenuItem>
+          )
+        }
         <div
           style={{
             height: "1px",
@@ -68,21 +99,41 @@ export default function BasicMenu() {
             width: "100%",
           }}
         />
-        <MenuItem component={Link} to="/owner" className="menu-items">
-          Airbnb Your Home
-        </MenuItem>
+
         <MenuItem onClick={handleClose} className="menu-items">
           Host an experience
         </MenuItem>
+
+        {
+          user && user ? (
+            <MenuItem onClick={logout} className="menu-items">
+              Logout
+            </MenuItem>
+          ) :
+            <>
+              <MenuItem className="menu-items" onClick={handleOpenModal}>
+                login/register
+              </MenuItem>
+              <MenuItem className="menu-items">
+                <GoogleLogin
+                  clientId='884724746848-412afcr1b3pg39o206pj5rlha8driq78.apps.googleusercontent.com'
+                  onSuccess={async (res) => {
+                    loginGoogle(res)
+                  }}
+                  onError={(err) => console.log(err)}
+                  containerClass="<your_custom_class>"
+                >
+                  Google Login
+                </GoogleLogin>
+              </MenuItem>
+            </>
+        }
         <MenuItem onClick={handleClose} className="menu-items">
           Help
         </MenuItem>
-        <MenuItem onClick={handleClose} className="menu-items">
-          
-        </MenuItem>
       </Menu>
-     
-      <KeepMountedModal openModal={openModal} setOpenModal={setOpenModal}/>
+
+      <KeepMountedModal openModal={openModal} setOpenModal={setOpenModal} />
     </div>
   );
 }

@@ -4,7 +4,6 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -14,7 +13,7 @@ import swal from "sweetalert";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createHome } from '../../service/homeService';
-
+import './createHome.css'
 const validateSchema = Yup.object().shape({
     // username: Yup.string()
     //     .min(6, "Needs to be between 6 and 12 characters long")
@@ -107,9 +106,10 @@ export default function CreateHome({ setOpenModal }) {
 
                         <form onSubmit={formik.handleSubmit}>
                             <div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
+                                <div style={{display:"flex" , justifyContent:"space-between"}} className='f'>
                                     <TextField
                                         margin="normal"
+                                        padding="5"
                                         width = "40%"
                                         label="nameHome"
                                         name="nameHome"
@@ -186,11 +186,13 @@ export default function CreateHome({ setOpenModal }) {
                                         helperText={formik.touched.description && formik.errors.description}
                                     />
                                 </div>
+                                <div style={{display: 'none'}}>
+    
                                 <TextField
-                                        type='hidden'
                                         name="user"
                                         value={formik.values.user}
                                     />
+                                </div>
                                 <Button
                                     type="submit"
                                     fullWidth

@@ -11,7 +11,7 @@ function App() {
       <Route path="/" element={<HomePage/>}/>
       <Route path="/owner" element={<OwnerPage/>}/>
       <Route path="/editHome" element={<EditHome/>}/>
-      </Routes>
+    </Routes>
   );
 }
 

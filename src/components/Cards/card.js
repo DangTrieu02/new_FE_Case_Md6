@@ -6,7 +6,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
-import { Link } from "react-router-dom";
 
 function Card({card}) {
   const [openModal,setOpenModal]= useState(false);

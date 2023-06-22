@@ -20,7 +20,6 @@ function HomePage() {
 
   return (
     <>
-    {console.log(homes,"user")}
       <Header />
       <Filter
         selectedFilter={selectedFilter}

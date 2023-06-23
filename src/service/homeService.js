@@ -21,12 +21,9 @@ export const editHome = createAsyncThunk(`homes/editHome`,async(data)=>{
     const res= await customAxios.get(`homes/${data.id}`,data.newHome)
     return res.data
 });
-// export const getHomeById = createAsyncThunk(`homes/getHomeById`,async(id)=>{
-//     const res= await customAxios.put(`homes/${id}`)
-//     return res.data
-// });
-
-export const getHomeById = (async(id)=>{
-    const res= await customAxios.put(`homes/${id}`)
+export const getHomeById = createAsyncThunk(`homes/getHomeById`,async(id)=>{
+    const res= await customAxios.get(`/homes/detail/${id}`)
     return res.data
 });
+
+

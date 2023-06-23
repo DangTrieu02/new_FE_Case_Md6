@@ -54,15 +54,11 @@ function Card({ card }) {
           <span style={{ fontWeight: "600" }}>${card.price}</span> / night
         </p>
         {
-          currentPath === "/owner" ?
+          currentPath === "/owner" &&
             <div class="box" >
               <img src="https://icons.iconarchive.com/icons/arturo-wibawa/akar/24/edit-icon.png" alt="" />
               <img src="https://icons.iconarchive.com/icons/pictogrammers/material/24/delete-forever-outline-icon.png" alt="" />
             </div>
-            :
-            <div class="box" >
-            <img  src="https://icons.iconarchive.com/icons/github/octicons/24/info-24-icon.png" alt="" />
-          </div>
         }
       </div>
 

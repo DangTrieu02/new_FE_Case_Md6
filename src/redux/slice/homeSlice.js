@@ -30,9 +30,9 @@ const homeSlice = createSlice({
                 }
             }
         })
-        // builder.addCase(getHomeById.fulfilled,(state,action)=>{
-        //     state.currentHome = action.payload
-        // })
+        builder.addCase(getHomeById.fulfilled,(state,action)=>{
+            state.currentHome = action.payload
+        })
     }
 })
 export default homeSlice.reducer

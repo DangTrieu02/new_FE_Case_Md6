@@ -1,3 +1,4 @@
+// homeService.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import customAxios from "./api";
 
@@ -56,6 +57,14 @@ export const getHomeByStatus = createAsyncThunk(
     `homes/getHomeByStatus`,
     async (status) => {
         const res = await customAxios.get(`homes/status?status=${status}`);
+        return res.data;
+    }
+);
+
+export const getHomeByAddress = createAsyncThunk(
+    "homes/getHomeByAddress",
+    async (address) => {
+        const res = await customAxios.get(`homes/find-by-address?address=${address}`);
         return res.data;
     }
 );

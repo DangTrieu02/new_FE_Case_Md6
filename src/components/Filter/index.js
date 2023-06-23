@@ -1,15 +1,26 @@
-// filter/index.js
-import React from "react";
-import {links} from "../../assets/images-links";
+// Filter.js
+
+import React, { useState } from "react";
+import { links } from "../../assets/images-links";
 import "./styles.css";
 import Box from "@mui/material/Box";
-import Tabs, {tabsClasses} from "@mui/material/Tabs";
+import Tabs, { tabsClasses } from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
-function Filter({selectedFilter, setSelectedFilter, filterHomesByCategory}) {
+function Filter({ selectedFilter, setSelectedFilter, onSearch, onSearchQueryChange }) {
+    const [searchQuery, setSearchQuery] = useState(""); // Define searchQuery state
+
     const handleChange = (event, newValue) => {
         setSelectedFilter(newValue);
-        filterHomesByCategory(links[newValue].category);
+    };
+
+    const handleSearchQueryChange = (event) => {
+        onSearchQueryChange(event.target.value);
+    };
+
+    const handleSearch = (event) => {
+        event.preventDefault();
+        onSearch(event);
     };
 
     return (
@@ -17,7 +28,7 @@ function Filter({selectedFilter, setSelectedFilter, filterHomesByCategory}) {
             <Box
                 sx={{
                     flexGrow: 1,
-                    maxWidth: {xs: 150, sm: 1360},
+                    maxWidth: { xs: 150, sm: 1360 },
                     bgcolor: "background.paper",
                 }}
             >
@@ -29,7 +40,7 @@ function Filter({selectedFilter, setSelectedFilter, filterHomesByCategory}) {
                     aria-label="visible arrows tabs example"
                     sx={{
                         [`& .${tabsClasses.scrollButtons}`]: {
-                            "&.Mui-disabled": {opacity: 0.3},
+                            "&.Mui-disabled": { opacity: 0.3 },
                         },
                     }}
                 >
@@ -37,22 +48,24 @@ function Filter({selectedFilter, setSelectedFilter, filterHomesByCategory}) {
                         <div
                             key={i}
                             className={`links-box ${i === selectedFilter && "selected-box"}`}
-                            onClick={() => {
-                                setSelectedFilter(i);
-                                filterHomesByCategory(item.category);
-                            }}
+                            onClick={() => setSelectedFilter(i)}
                         >
-                            <img src={item.imgSrc} className="links-img"/>
-                            <p
-                                className={`links-label ${
-                                    i === selectedFilter && "selected-label"
-                                }`}
-                            >
-                                <Tab label={item.label}/>
+                            <img src={item.imgSrc} className="links-img" />
+                            <p className={`links-label ${i === selectedFilter && "selected-label"}`}>
+                                <Tab label={item.label} />
                             </p>
                         </div>
                     ))}
                 </Tabs>
+                <form onSubmit={handleSearch}>
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        value={searchQuery}
+                        onChange={(event) => setSearchQuery(event.target.value)} // Update searchQuery state
+                    />
+                    <button type="submit">Search</button>
+                </form>
             </Box>
         </div>
     );

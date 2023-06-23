@@ -1,9 +1,11 @@
+// homePage.js
+
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Cards from '../components/Cards';
 import Filter from './../components/Filter/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllHome, getHomeByCategory, getHomeByName } from '../service/homeService';
+import { getAllHome, getHomeByCategory, getHomeByName, getHomeByAddress } from '../service/homeService';
 
 function HomePage() {
     const homes = useSelector(({ home }) => home.list);
@@ -22,6 +24,9 @@ function HomePage() {
         if (selectedFilter === 0) {
             // Find homes by name
             dispatch(getHomeByName(searchQuery));
+        } else if (selectedFilter === 4) {
+            // Find homes by address
+            dispatch(getHomeByAddress(searchQuery));
         } else {
             // Find homes by category
             dispatch(getHomeByCategory(selectedFilter));

@@ -1,3 +1,4 @@
+// ProfileMenu.js
 import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -26,8 +27,13 @@ export default function BasicMenu({ user }) {
     };
 
     const handleClose = (event) => {
-        event.stopPropagation(); // Prevent menu from closing when clicking the dialog button
-        setAnchorEl(null);
+        const clickedElement = event.target;
+        const isInteractiveElement =
+            clickedElement.tagName === "INPUT" || clickedElement.tagName === "BUTTON";
+
+        if (!isInteractiveElement) {
+            setAnchorEl(null);
+        }
     };
 
     const location = useLocation();
@@ -69,15 +75,15 @@ export default function BasicMenu({ user }) {
                 open={open}
                 onClose={handleClose}
                 MenuListProps={{
-                    "aria-labelledby": "basic-button",
+                    "aria-labelledby": "basic-button"
                 }}
                 sx={{
                     ".MuiPaper-root": {
                         minWidth: "200px",
                         borderRadius: "1rem",
                         boxShadow:
-                            "0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%)",
-                    },
+                            "0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%)"
+                    }
                 }}
             >
                 {user && currentPath === "/" ? (
@@ -98,7 +104,7 @@ export default function BasicMenu({ user }) {
                     style={{
                         height: "1px",
                         backgroundColor: "var(--grey)",
-                        width: "100%",
+                        width: "100%"
                     }}
                 />
                 <MenuItem onClick={handleClose} className="menu-items">
@@ -106,7 +112,7 @@ export default function BasicMenu({ user }) {
                 </MenuItem>
                 {user && (
                     <>
-                        <MenuItem onClick={handleClose} className="menu-items">
+                        <MenuItem className="menu-items">
                             <ChangePasswordDialog handleClose={handleClose} />
                         </MenuItem>
                         <MenuItem onClick={logout} className="menu-items">
@@ -116,10 +122,7 @@ export default function BasicMenu({ user }) {
                 )}
                 {!user && (
                     <>
-                        <MenuItem
-                            className="menu-items"
-                            onClick={handleOpenModal}
-                        >
+                        <MenuItem className="menu-items" onClick={handleOpenModal}>
                             login/register
                         </MenuItem>
                         <MenuItem className="menu-items">

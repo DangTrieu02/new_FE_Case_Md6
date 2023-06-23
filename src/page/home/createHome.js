@@ -13,7 +13,7 @@ import swal from "sweetalert";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createHome } from '../../service/homeService';
-import './createHome.css'
+import './css/createHome.css'
 const validateSchema = Yup.object().shape({
     // username: Yup.string()
     //     .min(6, "Needs to be between 6 and 12 characters long")

@@ -38,7 +38,7 @@ export default function BasicMenu({ user }) {
   const logout = () => {
     localStorage.clear();
     navigate('/')
-    handleClose()
+    window.location.reload();
   }
   const loginGoogle = async (values) => {
     await dispatch(loginWithGoogle(values)).then(() => {

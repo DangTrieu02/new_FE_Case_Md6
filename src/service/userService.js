@@ -11,7 +11,7 @@ export const loginWithGoogle = createAsyncThunk("users/loginWithGoogle",async(da
 })
 export const editUser = createAsyncThunk(`users/edit-profile/`,async(data)=>{
     await customAxios.put(`users/edit-profile/${data.id}`,data.user)
-    const newUser = await customAxios.get(`users/my-profile/${data.id}`)
+    const newUser = await customAxios.get(`users/showProfile`)
     return newUser.data
 })
 export const showUser = createAsyncThunk(`users/showProfile`,async(data)=>{

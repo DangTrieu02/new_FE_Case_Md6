@@ -23,6 +23,8 @@ const userSlice = createSlice({
         })
         builder.addCase(editUser.fulfilled,(state,action)=>{
             state.currentUser = action.payload
+            localStorage.setItem("user",JSON.stringify(action.payload))
+            localStorage.setItem("access-token",action.payload.token)
         })
         builder.addCase(showUser.fulfilled, (state, action) => {
             state.currentUser = action.payload

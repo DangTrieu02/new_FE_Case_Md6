@@ -1,3 +1,4 @@
+// createHome.js
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -64,9 +65,9 @@ export default function CreateHome({ setOpenModal }) {
     if(user){
         userId = user.idUser
     }
-    
+
     const formik = useFormik({
-                 
+
         initialValues: {
             nameHome: '',
             address: "",
@@ -187,7 +188,7 @@ export default function CreateHome({ setOpenModal }) {
                                     />
                                 </div>
                                 <div style={{display: 'none'}}>
-    
+
                                 <TextField
                                         name="user"
                                         value={formik.values.user}

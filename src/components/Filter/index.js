@@ -57,15 +57,6 @@ function Filter({ selectedFilter, setSelectedFilter, onSearch, onSearchQueryChan
                         </div>
                     ))}
                 </Tabs>
-                <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        value={searchQuery}
-                        onChange={(event) => setSearchQuery(event.target.value)} // Update searchQuery state
-                    />
-                    <button type="submit">Search</button>
-                </form>
             </Box>
         </div>
     );

@@ -1,3 +1,4 @@
+// Cards/card.js
 import React, { useState } from "react";
 import "./styles.css";
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";

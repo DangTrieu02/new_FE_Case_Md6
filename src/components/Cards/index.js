@@ -1,4 +1,4 @@
-// Cards.js
+// Cards/index.js
 
 import React from "react";
 import Card from "./card";

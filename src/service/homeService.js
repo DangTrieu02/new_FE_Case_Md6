@@ -1,14 +1,14 @@
 // homeService.js
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import customAxios from "./api";
 
-export const getAllHome = createAsyncThunk("homes/getAllHome", async () => {
+export const getAllHome = createAsyncThunk("homes/findAll", async () => {
     const res = await customAxios.get("homes/");
     return res.data;
 });
 
 export const createHome = createAsyncThunk(
-    "homes/createHome",
+    "homes/addHome",
     async (data) => {
         const res = await customAxios.post("homes/", data);
         return res.data;
@@ -39,8 +39,8 @@ export const getHomeByCategory = createAsyncThunk(
 
 export const getHomeByPrice = createAsyncThunk(
     `homes/getHomeByPrice`,
-    async (price) => {
-        const res = await customAxios.get(`homes/price?price=${price}`);
+    async ({min, max}) => {
+        const res = await customAxios.get(`homes/price?min=${min}&max=${max}`);
         return res.data;
     }
 );
@@ -64,7 +64,9 @@ export const getHomeByStatus = createAsyncThunk(
 export const getHomeByAddress = createAsyncThunk(
     "homes/getHomeByAddress",
     async (address) => {
-        const res = await customAxios.get(`homes/find-by-address?address=${address}`);
+        const res = await customAxios.get(
+            `homes/find-by-address?address=${address}`
+        );
         return res.data;
     }
 );

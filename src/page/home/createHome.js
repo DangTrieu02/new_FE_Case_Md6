@@ -257,22 +257,11 @@ export default function CreateHome({setOpenModal}) {
                                         id="upload-input"
                                         multiple
                                     />
-                                    <Stack direction="row" spacing={2}>
-                                        {uploadedImage.map((image, index) => (
-                                            <Card
-                                                key={index}
-                                                onClick={() => handleImageClick(index)}
-                                                sx={{
-                                                    width: 150,
-                                                    height: 150,
-                                                    cursor: "pointer",
-                                                    ...(selectedIndex === index && {backgroundColor: "lightblue"}),
-                                                }}
-                                            >
-                                                <CardMedia component="img" src={image} alt={`Image ${index}`}/>
-                                            </Card>
+                                    <div >
+                                        {imageUrls.map((image, index) => (
+                                            <img src={image} style={{width: 'calc(25% - 10px)',margin: '5px'}}/>
                                         ))}
-                                    </Stack>
+                                    </div>
                                 </>
 
                                 <div style={{display: 'none'}}>

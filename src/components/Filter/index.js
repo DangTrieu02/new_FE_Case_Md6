@@ -1,13 +1,13 @@
 // Filter.js
 
-import React, { useState } from "react";
-import { links } from "../../assets/images-links";
-import "./style.css";
+import React, {useState} from "react";
+import {links} from "../../assets/images-links";
+import "./styles.css";
 import Box from "@mui/material/Box";
-import Tabs, { tabsClasses } from "@mui/material/Tabs";
+import Tabs, {tabsClasses} from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
-function Filter({ selectedFilter, setSelectedFilter, onSearch, onSearchQueryChange }) {
+function Filter({selectedFilter, setSelectedFilter, onSearch, onSearchQueryChange}) {
     const [searchQuery, setSearchQuery] = useState(""); // Define searchQuery state
 
     const handleChange = (event, newValue) => {
@@ -28,7 +28,7 @@ function Filter({ selectedFilter, setSelectedFilter, onSearch, onSearchQueryChan
             <Box
                 sx={{
                     flexGrow: 1,
-                    maxWidth: { xs: 150, sm: 1360 },
+                    maxWidth: {xs: 150, sm: 1360},
                     bgcolor: "background.paper",
                 }}
             >
@@ -40,7 +40,7 @@ function Filter({ selectedFilter, setSelectedFilter, onSearch, onSearchQueryChan
                     aria-label="visible arrows tabs example"
                     sx={{
                         [`& .${tabsClasses.scrollButtons}`]: {
-                            "&.Mui-disabled": { opacity: 0.3 },
+                            "&.Mui-disabled": {opacity: 0.3},
                         },
                     }}
                 >
@@ -50,9 +50,9 @@ function Filter({ selectedFilter, setSelectedFilter, onSearch, onSearchQueryChan
                             className={`links-box ${i === selectedFilter && "selected-box"}`}
                             onClick={() => setSelectedFilter(i)}
                         >
-                            <img src={item.imgSrc} className="links-img" />
+                            <img src={item.imgSrc} className="links-img" alt=""/>
                             <p className={`links-label ${i === selectedFilter && "selected-label"}`}>
-                                <Tab label={item.label} />
+                                <Tab label={item.label}/>
                             </p>
                         </div>
                     ))}

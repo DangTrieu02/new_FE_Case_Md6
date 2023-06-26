@@ -23,7 +23,11 @@ import {
     TextField,
 } from "@mui/material";
 import {resetFilter, setFilter} from "../../redux/slice/homeSlice";
-import {getHomeByName, getHomeByStatus} from "../../service/homeService";
+import {
+    getHomeByName,
+    getHomeByStatus,
+    getHomeByPrice, // Import the getHomeByPrice async thunk function
+} from "../../service/homeService";
 
 function Header() {
     const dispatch = useDispatch();
@@ -33,6 +37,7 @@ function Header() {
     const [searchOption, setSearchOption] = useState("name");
     const [searchValue, setSearchValue] = useState("");
     const [searchStatus, setSearchStatus] = useState("available");
+    const [searchPrice, setSearchPrice] = useState({min: "", max: ""}); // New state for price range
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -48,6 +53,7 @@ function Header() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setSearchPrice({min: "", max: ""}); // Reset price range state
     };
 
     const handleChangeSearchOption = (event) => {
@@ -62,17 +68,26 @@ function Header() {
         setSearchStatus(event.target.value);
     };
 
+    const handleChangeSearchPrice = (event) => {
+        setSearchPrice({
+            ...searchPrice,
+            [event.target.name]: event.target.value,
+        });
+    };
+
     const handleSearch = () => {
         if (searchOption === "name") {
-            // Search by name logic
             console.log("Searching by name:", searchValue);
             dispatch(setFilter({nameHome: searchValue}));
             dispatch(getHomeByName(searchValue));
-        } else {
-            // Search by status logic
+        } else if (searchOption === "status") {
             console.log("Searching by status:", searchStatus);
             dispatch(setFilter({status: searchStatus}));
             dispatch(getHomeByStatus(searchStatus));
+        } else if (searchOption === "price") {
+            console.log("Searching by price range:", searchPrice);
+            dispatch(setFilter({price: searchPrice}));
+            dispatch(getHomeByPrice(searchPrice)); // Call getHomeByPrice with the price range
         }
         handleCloseDialog();
     };
@@ -113,7 +128,11 @@ function Header() {
                 </div>
                 <div className="profile-container">
                     {currentPath === "/owner" && user && (
-                        <div className="airbnb-your-home" onClick={handleOpenModal}>
+                        <div
+                            className="airbnb-your-home"
+                            onClick={handleOpenModal}
+                            style={{backgroundColor: "deeppink"}}
+                        >
                             {" "}
                             Add your home here
                         </div>
@@ -131,7 +150,7 @@ function Header() {
 
             <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogTitle>Select Search Option</DialogTitle>
-                <DialogContent>
+                <DialogContent className="dialog-content">
                     <FormControl component="fieldset">
                         <RadioGroup
                             aria-label="searchOption"
@@ -149,6 +168,11 @@ function Header() {
                                 control={<Radio/>}
                                 label="Search by status"
                             />
+                            <FormControlLabel
+                                value="price"
+                                control={<Radio/>}
+                                label="Search by price"
+                            />
                         </RadioGroup>
                     </FormControl>
                     {searchOption === "name" ? (
@@ -158,7 +182,7 @@ function Header() {
                             value={searchValue}
                             onChange={handleChangeSearchValue}
                         />
-                    ) : (
+                    ) : searchOption === "status" ? (
                         <FormControl component="fieldset">
                             <RadioGroup
                                 aria-label="searchStatus"
@@ -183,10 +207,31 @@ function Header() {
                                 />
                             </RadioGroup>
                         </FormControl>
+                    ) : (
+                        <FormControl component="fieldset">
+                            <TextField
+                                label="Minimum price"
+                                variant="outlined"
+                                name="min"
+                                value={searchPrice.min}
+                                onChange={handleChangeSearchPrice}
+                            />
+                            <TextField
+                                label="Maximum price"
+                                variant="outlined"
+                                name="max"
+                                value={searchPrice.max}
+                                onChange={handleChangeSearchPrice}
+                            />
+                        </FormControl>
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleSearch} variant="contained">
+                    <Button
+                        onClick={handleSearch}
+                        variant="contained"
+                        style={{backgroundColor: "deeppink"}}
+                    >
                         Search
                     </Button>
                 </DialogActions>

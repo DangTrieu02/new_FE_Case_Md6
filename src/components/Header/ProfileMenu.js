@@ -123,7 +123,7 @@ export default function BasicMenu({ user }) {
                 {!user && (
                     <>
                         <MenuItem className="menu-items" onClick={handleOpenModal}>
-                            login/register
+                            Login/Register
                         </MenuItem>
                         <MenuItem className="menu-items">
                             <GoogleLogin

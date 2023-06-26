@@ -11,10 +11,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useFormik } from 'formik';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {useFormik} from 'formik';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
 
@@ -61,7 +61,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function Register({ setIsLogin }) {
+export default function Register({setIsLogin}) {
     const handleRegister = async (values) => {
         axios.post('http://localhost:3001/users/register', values).then((response) => {
             if (response.status == 209) {
@@ -101,7 +101,7 @@ export default function Register({ setIsLogin }) {
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <Box
                     sx={{
                         marginTop: 1,
@@ -110,13 +110,13 @@ export default function Register({ setIsLogin }) {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
+                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Register
                     </Typography>
-                    <Box noValidate sx={{ mt: 1 }}>
+                    <Box noValidate sx={{mt: 1}}>
                         <form onSubmit={formik.handleSubmit}>
                             <div className='register-text-field'>
                                 <TextField
@@ -182,8 +182,8 @@ export default function Register({ setIsLogin }) {
                                     onChange={formik.handleChange}
                                     required
                                 >
-                                    <option style={{ color: "black" }} value="user">user</option>
-                                    <option style={{ color: "black" }} value="owner">owner</option>
+                                    <option style={{color: "black"}} value="user">user</option>
+                                    <option style={{color: "black"}} value="owner">owner</option>
                                 </select>
                             </div>
 
@@ -195,18 +195,16 @@ export default function Register({ setIsLogin }) {
                                     onChange={formik.handleChange}
                                     required
                                 >
-                                    <option value="user">user</option>
-                                    <option value="owner">owner</option>
+                                    <option value="user">User</option>
+                                    <option value="owner">Owner</option>
                                 </select>
                             </div>
-
-
 
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
+                                sx={{mt: 3, mb: 2}}
                             >
                                 Sign In
                             </Button>
@@ -218,15 +216,17 @@ export default function Register({ setIsLogin }) {
                                     Forgot password?
                                 </Link>
                             </Grid>
-                            <Grid item >
-                                <Link onClick={() => { setIsLogin(false) }} variant="body2">
+                            <Grid item>
+                                <Link onClick={() => {
+                                    setIsLogin(false)
+                                }} variant="body2">
                                     Already have an account? Login
                                 </Link>
                             </Grid>
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 2, mb: 1 }} />
+                <Copyright sx={{mt: 2, mb: 1}}/>
             </Container>
         </ThemeProvider>
     );

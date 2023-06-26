@@ -6,14 +6,21 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useFormik } from "formik";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {useFormik} from "formik";
 import * as Yup from "yup";
 import swal from "sweetalert";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createHome } from '../../service/homeService';
-import './css/createHome.css'
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {createHome} from '../../service/homeService';
+import React, {useState, useEffect} from "react";
+import {Input, Stack} from "@mui/material";
+import Card from "../../components/Cards/card";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {storage} from "./firebase";
+import CardMedia from '@mui/material/CardMedia';
+
+
 const validateSchema = Yup.object().shape({
     // username: Yup.string()
     //     .min(6, "Needs to be between 6 and 12 characters long")
@@ -42,12 +49,28 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function CreateHome({ setOpenModal }) {
-    const user = useSelector(({ user }) => {
+export default function CreateHome({setOpenModal}) {
+    const [uploadedImage, setUploadedImage] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedIndex, setSelectedIndex] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+
+    const handleImageClick = (index) => {
+        setSelectedIndex(index);
+        setSelectedImage(uploadedImage[index]);
+        setDialogOpen(true);
+    };
+    const user = useSelector(({user}) => {
         return user.currentUser
     })
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [imageUpload, setImageUpload] = useState(null);
+    const [imageUrls, setImageUrls] = useState([]);
+
     const handleCreate = async (values) => {
 
         await dispatch(createHome(values)).then(() => {
@@ -61,12 +84,12 @@ export default function CreateHome({ setOpenModal }) {
         window.location.reload()
     };
     let userId;
-    if(user){
+    if (user) {
         userId = user.idUser
     }
-    
+
+
     const formik = useFormik({
-                 
         initialValues: {
             nameHome: '',
             address: "",
@@ -75,21 +98,44 @@ export default function CreateHome({ setOpenModal }) {
             floorArea: '',
             bedrooms: '',
             bathrooms: '',
-            status: "",
+            status: "For rent",
             user: userId,
             category: 2,
-            Image: "https://th.bing.com/th?q=Nha+O+My&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.4&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=vi&adlt=moderate&t=1&mw=247"
+            image: imageUrls
         },
+        enableReinitialize: true,
         validationSchema: validateSchema,
         onSubmit: (values) => {
-            handleCreate(values)
+            console.log(values)
+            // handleCreate(values)
         },
     });
-
+    const handleUpload = async (event) => {
+        const file = event.target.files[0];
+        const storageRef = ref(storage);
+        const timestamp = Date.now();
+        const fileRef = ref(storageRef, `${timestamp}_${file.name}`);
+        try {
+            // for (let i = 0; i < file.length; i++) {
+            //     const file = file[i]
+            if (uploadedImage.length < 4) {
+                await uploadBytes(fileRef, file);
+                const imageUrl = await getDownloadURL(fileRef);
+                console.log(imageUrl)
+                setImageUrls([...imageUrls, imageUrl])
+            } else {
+                setErrorMessage("limit 4 image");
+                setSnackbarOpen(true);
+            }
+            // }
+        } catch (error) {
+            console.log("Error uploading image: " + error);
+        }
+    };
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <Box
                     sx={{
                         marginTop: 1,
@@ -102,15 +148,15 @@ export default function CreateHome({ setOpenModal }) {
                     <Typography component="h1" variant="h5">
                         Create new home
                     </Typography>
-                    <Box noValidate sx={{ mt: 1 }}>
+                    <Box noValidate sx={{mt: 1}}>
 
                         <form onSubmit={formik.handleSubmit}>
                             <div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}} className='f'>
+                                <div style={{display: "flex", justifyContent: "space-between"}} className='f'>
                                     <TextField
                                         margin="normal"
                                         padding="5"
-                                        width = "40%"
+                                        width="40%"
                                         label="nameHome"
                                         name="nameHome"
                                         value={formik.values.nameHome}
@@ -120,7 +166,7 @@ export default function CreateHome({ setOpenModal }) {
                                     />
                                     <TextField
                                         margin="normal"
-                                        width = "40%"
+                                        width="40%"
                                         label="address"
                                         name="address"
                                         value={formik.values.address}
@@ -129,7 +175,7 @@ export default function CreateHome({ setOpenModal }) {
                                         helperText={formik.touched.address && formik.errors.address}
                                     />
                                 </div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
+                                <div style={{display: "flex", justifyContent: "space-between"}}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -152,7 +198,7 @@ export default function CreateHome({ setOpenModal }) {
                                     />
                                 </div>
 
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
+                                <div style={{display: "flex", justifyContent: "space-between"}}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -174,7 +220,7 @@ export default function CreateHome({ setOpenModal }) {
                                         helperText={formik.touched.bathrooms && formik.errors.bathrooms}
                                     />
                                 </div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
+                                <div style={{display: "flex", justifyContent: "space-between"}}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -185,10 +231,53 @@ export default function CreateHome({ setOpenModal }) {
                                         error={formik.touched.description && Boolean(formik.errors.description)}
                                         helperText={formik.touched.description && formik.errors.description}
                                     />
+                                    <TextField
+                                        margin="normal"
+                                        fullWidth
+                                        label="status"
+                                        name="status"
+                                        value={formik.values.status}
+                                        onChange={formik.handleChange}
+                                        error={formik.touched.status && Boolean(formik.errors.status)}
+                                        helperText={formik.touched.status && formik.errors.status}
+                                    />
+
                                 </div>
+                                <>
+                                    <label htmlFor="upload-input">
+                                        <Button variant="contained" component="span">
+                                            Tải lên
+                                        </Button>
+                                    </label>
+
+                                    <Input
+                                        type="file"
+                                        onChange={handleUpload}
+                                        style={{display: "none"}}
+                                        id="upload-input"
+                                        multiple
+                                    />
+                                    <Stack direction="row" spacing={2}>
+                                        {uploadedImage.map((image, index) => (
+                                            <Card
+                                                key={index}
+                                                onClick={() => handleImageClick(index)}
+                                                sx={{
+                                                    width: 150,
+                                                    height: 150,
+                                                    cursor: "pointer",
+                                                    ...(selectedIndex === index && {backgroundColor: "lightblue"}),
+                                                }}
+                                            >
+                                                <CardMedia component="img" src={image} alt={`Image ${index}`}/>
+                                            </Card>
+                                        ))}
+                                    </Stack>
+                                </>
+
                                 <div style={{display: 'none'}}>
-    
-                                <TextField
+
+                                    <TextField
                                         name="user"
                                         value={formik.values.user}
                                     />
@@ -197,14 +286,15 @@ export default function CreateHome({ setOpenModal }) {
                                     type="submit"
                                     fullWidth
                                     variant="contained"
-                                    sx={{ mt: 3, mb: 2 }}
+                                    sx={{mt: 3, mb: 2}}
+
                                 >
                                     Create
                                 </Button>
                             </div>
                         </form>
                         <Grid container>
-                            <Grid item >
+                            <Grid item>
                             </Grid>
                         </Grid>
                     </Box>

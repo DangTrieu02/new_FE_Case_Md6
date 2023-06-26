@@ -1,21 +1,21 @@
+/* filter/style.css */
 .filter-div {
-
   padding: 1rem 3rem;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   overflow-x: auto;
 }
 
 .links-box {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-right: 2rem;
   opacity: 0.5;
   border-bottom: 1px solid var(--white);
-  min-width: 85px;
+  min-width: 100px;
 }
 
 .links-box:hover,
@@ -27,13 +27,13 @@
 }
 
 .links-img {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 2rem;
   object-fit: contain;
 }
 
 .links-label {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--font-grey);
 }
@@ -41,9 +41,9 @@
 .selected-label {
   color: var(--black);
 }
+
 @media only screen and (max-width: 800px) {
   .filter-div {
-    padding: 0.5rem;
-    padding-top: 1.5rem;
+    padding: 1.5rem 0.5rem 0.5rem;
   }
 }

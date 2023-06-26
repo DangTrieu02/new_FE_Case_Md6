@@ -14,13 +14,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import './css/detail.css'
+import Header from '../../components/Header'
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { editHome, getHomeById } from '../../service/homeService';
 import swal from "sweetalert";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createHome, getHomeById } from '../../service/homeService';
-import { useEffect } from 'react';
-
-
 
 const validateSchema = Yup.object().shape({
     // username: Yup.string()
@@ -34,178 +33,219 @@ const validateSchema = Yup.object().shape({
 
 })
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-const defaultTheme = createTheme(); 
 
 export default function EditHome() {
+    const navigate = useNavigate()
+    const dispatch = useDispatch();
+    let { id } = useParams()
+    const currentHome = useSelector(({ home }) => {
+        return home.currentHome
+    })
+    React.useEffect(() => {
+        dispatch(getHomeById(id))
+    }, [])
+    const handleEdit = async (values) => {
 
-const dispatch = useDispatch()
-const navigate = useNavigate()
-
-const handleCreate = async (values) => {
-
-    await dispatch(createHome(values)).then(() => {
-        swal({
-            title: "Create success !",
-            icon: "success",
-            buttons: "close",
+        await dispatch(editHome({ id: id, newHome: values })).then(() => {
+            swal({
+                title: "Create success !",
+                icon: "success",
+                buttons: "close",
+            });
+            navigate('/owner')
         });
+    };
+
+    const defaultTheme = createTheme()
+
+    const formik = useFormik({
+        initialValues: {
+            nameHome: currentHome && currentHome.nameHome,
+            address: currentHome && currentHome.address,
+            description: currentHome && currentHome.description,
+            price: currentHome && currentHome.price,
+            floorArea: currentHome && currentHome.floorArea,
+            bedrooms: currentHome && currentHome.bedrooms,
+            bathrooms: currentHome && currentHome.bathrooms,
+            category: currentHome && currentHome.category,
+            Image: currentHome && currentHome.image[0]
+        },
+        enableReinitialize: true,
+        validationSchema: validateSchema,
+        onSubmit: (values) => {
+            handleEdit(values)
+        },
     });
-    window.location.reload()
-};
+    return (
+        <>
+            <Header />
+            {currentHome
+                &&
+                <div className="container">
+                    <div className="row justify-content-center mt-4">
+                        <div className="col-lg-6 mb-5 mb-lg-0" style={{ marginTop: '100px' }}>
 
-
-const formik = useFormik({
-             
-    initialValues: {
-        nameHome: "home.nameHome",
-        address:" home.address",
-        description: "home.description",
-        price: "home.price",
-        floorArea: "home.floorArea",
-        bedrooms: "home.bedrooms",
-        bathrooms: "home.bathrooms",
-        category: 2,
-        Image: "https://th.bing.com/th?q=Nha+Rong&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.4&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=vi&adlt=moderate&t=1&mw=247"
-    },
-    enableReinitialize:true,
-    validationSchema: validateSchema,
-    onSubmit: (values) => {
-        handleCreate(values)
-    },
-});
-
-  return (
-    <div>
-     
-          <Box sx={style}>
-          <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-
-                    <Typography component="h1" variant="h5">
-                        Create new home
-                    </Typography>
-                    <Box noValidate sx={{ mt: 1 }}>
-
-                        <form onSubmit={formik.handleSubmit}>
-                            <div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
-                                    <TextField
-                                        margin="normal"
-                                        width = "40%"
-                                        label="nameHome"
-                                        name="nameHome"
-                                        value={formik.values.nameHome}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.nameHome && Boolean(formik.errors.nameHome)}
-                                        helperText={formik.touched.nameHome && formik.errors.nameHome}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        width = "40%"
-                                        label="address"
-                                        name="address"
-                                        value={formik.values.address}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.address && Boolean(formik.errors.address)}
-                                        helperText={formik.touched.address && formik.errors.address}
-                                    />
+                            <div className="row justify-content-center mt-2">
+                                <div className='col-9'>
+                                <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />    
                                 </div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="price"
-                                        name="price"
-                                        value={formik.values.price}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.price && Boolean(formik.errors.price)}
-                                        helperText={formik.touched.price && formik.errors.price}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="floorArea"
-                                        name="floorArea"
-                                        value={formik.values.floorArea}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.floorArea && Boolean(formik.errors.floorArea)}
-                                        helperText={formik.touched.floorArea && formik.errors.floorArea}
-                                    />
+                                <div className='col-3'>
+                                <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />    
+                                <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />   
+                                <img src={currentHome.image[0].image} class="d-block w-100 mb-4 " alt="..." />               
                                 </div>
+                            </div>  
+                        </div>
+                        <div className="col-lg-6">
+                            <div className="ps-lg-1-6 ps-xl-5">
+                                <div className="mb-5 wow fadeIn" >
+                                    <div className="text-start mb-1-6 wow fadeIn"  style={{ marginLeft: '-220px' }}>
+                                        <h3 className="h1 mb-0 text-primary">#Edit your home</h3>
+                                    </div>
+                                    <div>
+                                        <Box>
+                                            <ThemeProvider theme={defaultTheme}>
+                                                <Container component="main" maxWidth="xs">
+                                                    <CssBaseline />
+                                                    <Box
+                                                        sx={{
+                                                            marginTop: 1,
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            alignItems: 'center',
+                                                        }}
+                                                    >
+                                                        <Box noValidate sx={{ mt: 1 }}>
 
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="bedrooms"
-                                        name="bedrooms"
-                                        value={formik.values.bedrooms}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.bedrooms && Boolean(formik.errors.bedrooms)}
-                                        helperText={formik.touched.bedrooms && formik.errors.bedrooms}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="bathrooms"
-                                        name="bathrooms"
-                                        value={formik.values.bathrooms}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.bathrooms && Boolean(formik.errors.bathrooms)}
-                                        helperText={formik.touched.bathrooms && formik.errors.bathrooms}
-                                    />
+                                                            <form onSubmit={formik.handleSubmit}>
+                                                                <div>
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <div style={{ marginRight: '20px' }}>
+                                                                            <TextField
+                                                                                margin="normal"
+                                                                                width="40%"
+                                                                                label="nameHome"
+                                                                                name="nameHome"
+                                                                                value={formik.values.nameHome}
+                                                                                onChange={formik.handleChange}
+                                                                                error={formik.touched.nameHome && Boolean(formik.errors.nameHome)}
+                                                                                helperText={formik.touched.nameHome && formik.errors.nameHome}
+                                                                            />
+                                                                        </div>
+                                                                        <div>
+                                                                            <TextField
+                                                                                margin="normal"
+                                                                                width="40%"
+                                                                                label="address"
+                                                                                name="address"
+                                                                                value={formik.values.address}
+                                                                                onChange={formik.handleChange}
+                                                                                error={formik.touched.address && Boolean(formik.errors.address)}
+                                                                                helperText={formik.touched.address && formik.errors.address}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+                                                                        <div style={{ marginRight: '20px' }}>
+                                                                            <TextField
+                                                                                margin="normal"
+                                                                                fullWidth
+                                                                                label="price"
+                                                                                name="price"
+                                                                                value={formik.values.price}
+                                                                                onChange={formik.handleChange}
+                                                                                error={formik.touched.price && Boolean(formik.errors.price)}
+                                                                                helperText={formik.touched.price && formik.errors.price}
+                                                                            />
+                                                                        </div>
+                                                                        <div>
+                                                                            <TextField
+                                                                                margin="normal"
+                                                                                fullWidth
+                                                                                label="floorArea"
+                                                                                name="floorArea"
+                                                                                value={formik.values.floorArea}
+                                                                                onChange={formik.handleChange}
+                                                                                error={formik.touched.floorArea && Boolean(formik.errors.floorArea)}
+                                                                                helperText={formik.touched.floorArea && formik.errors.floorArea}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <div style={{ marginRight: '20px' }}>
+                                                                            <TextField
+                                                                                margin="normal"
+                                                                                fullWidth
+                                                                                label="bedrooms"
+                                                                                name="bedrooms"
+                                                                                value={formik.values.bedrooms}
+                                                                                onChange={formik.handleChange}
+                                                                                error={formik.touched.bedrooms && Boolean(formik.errors.bedrooms)}
+                                                                                helperText={formik.touched.bedrooms && formik.errors.bedrooms}
+                                                                            />
+                                                                        </div>
+                                                                        <div>
+                                                                            <TextField
+                                                                                margin="normal"
+                                                                                fullWidth
+                                                                                label="bathrooms"
+                                                                                name="bathrooms"
+                                                                                value={formik.values.bathrooms}
+                                                                                onChange={formik.handleChange}
+                                                                                error={formik.touched.bathrooms && Boolean(formik.errors.bathrooms)}
+                                                                                helperText={formik.touched.bathrooms && formik.errors.bathrooms}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <TextField
+                                                                            margin="normal"
+                                                                            fullWidth
+                                                                            label="description"
+                                                                            name="description"
+                                                                            value={formik.values.description}
+                                                                            onChange={formik.handleChange}
+                                                                            error={formik.touched.description && Boolean(formik.errors.description)}
+                                                                            helperText={formik.touched.description && formik.errors.description}
+                                                                        />
+                                                                        {/* {currentHome && <img src={currentHome.image[0].image} alt="" />} */}
+                                                                    </div>
+                                                                    <Button
+                                                                        type="submit"
+                                                                        fullWidth
+                                                                        variant="contained"
+                                                                        sx={{ mt: 3, mb: 2 }}
+                                                                    >
+                                                                        Save
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        fullWidth
+                                                                        onClick={() => navigate('/owner')}>
+                                                                        End
+                                                                    </Button>
+                                                                </div>
+                                                            </form>
+                                                            <Grid container>
+                                                                <Grid item >
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Box>
+                                                    </Box>
+                                                </Container>
+                                            </ThemeProvider>
+                                        </Box>
+                                    </div>
                                 </div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="description"
-                                        name="description"
-                                        value={formik.values.description}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.description && Boolean(formik.errors.description)}
-                                        helperText={formik.touched.description && formik.errors.description}
-                                    />
-                                </div>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{ mt: 3, mb: 2 }}
-                                >
-                                    Create
-                                </Button>
                             </div>
-                        </form>
-                        <Grid container>
-                            <Grid item >
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
-        </ThemeProvider>
-          </Box>
-    </div>
-  );
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </>
+
+    )
 }

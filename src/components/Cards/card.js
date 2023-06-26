@@ -40,14 +40,11 @@ function Card({ card }) {
         <div className="card-info-flex">
           <h3 className="card-title">{card.nameHome}</h3>
           <div className="edit">
-            {/* <button component={Link} to="/owner/editHome"> Edit</button> */}
             <div className="card-rating">
               <StarRateRoundedIcon />
-              <p>{card.status}</p>
             </div>
           </div>
         </div>
-        <i class="fa fa-cloud"></i>
         <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.floorArea} m2</p>
         <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.address}</p>
         <p style={{ margin: "0.2rem", fontSize: "1rem", color: "var(--black" }}>
@@ -56,7 +53,7 @@ function Card({ card }) {
         {
           currentPath === "/owner" &&
             <div class="box" >
-              <img src="https://icons.iconarchive.com/icons/arturo-wibawa/akar/24/edit-icon.png" alt="" />
+              <img onClick={()=>navigate(`/editHome/${card.idHome}`)} src="https://icons.iconarchive.com/icons/arturo-wibawa/akar/24/edit-icon.png" alt="" />
               <img src="https://icons.iconarchive.com/icons/pictogrammers/material/24/delete-forever-outline-icon.png" alt="" />
             </div>
         }

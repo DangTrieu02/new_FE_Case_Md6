@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllHome } from '../service/homeService';
 
 function HomePage() {
-
+  console.log('day la home')
   const homes = useSelector(({ home }) => {
     return home.list
   })
@@ -26,6 +26,7 @@ function HomePage() {
         setSelectedFilter={setSelectedFilter}
       />
       { homes && <Cards list={homes} />}
+  
     </>
   )
 }

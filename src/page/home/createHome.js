@@ -12,17 +12,15 @@ import * as Yup from "yup";
 import swal from "sweetalert";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createHome } from '../../service/homeService';
+import { createHome, getAllCategory } from '../../service/homeService';
 import './css/createHome.css'
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { useEffect } from 'react';
 const validateSchema = Yup.object().shape({
-    // username: Yup.string()
-    //     .min(6, "Needs to be between 6 and 12 characters long")
-    //     .max(32, "Needs to be between 6 and 12 characters long")
-    //     .required("required"),
-    // password: Yup.string()
-    //     .min(6, "Needs to be between 6 and 12 characters long")
-    //     .max(32, "Needs to be between 6 and 12 characters long")
-    //     .required("required")
+    nameHome: Yup.string()
+        .required("required"),
+        address: Yup.string()
+        .required("required")
 
 })
 
@@ -38,7 +36,6 @@ function Copyright(props) {
         </Typography>
     );
 }
-
 
 const defaultTheme = createTheme();
 
@@ -60,13 +57,18 @@ export default function CreateHome({ setOpenModal }) {
         });
         window.location.reload()
     };
+    const categories = useSelector(({ home }) => home.catgoryList)
+
     let userId;
-    if(user){
+    if (user) {
         userId = user.idUser
     }
-    
+     useEffect(() => {
+            dispatch(getAllCategory())
+          }, []);
+
     const formik = useFormik({
-                 
+
         initialValues: {
             nameHome: '',
             address: "",
@@ -77,7 +79,7 @@ export default function CreateHome({ setOpenModal }) {
             bathrooms: '',
             status: "",
             user: userId,
-            category: 2,
+            category: '',
             Image: "https://th.bing.com/th?q=Nha+O+My&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.4&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=vi&adlt=moderate&t=1&mw=247"
         },
         validationSchema: validateSchema,
@@ -106,11 +108,12 @@ export default function CreateHome({ setOpenModal }) {
 
                         <form onSubmit={formik.handleSubmit}>
                             <div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}} className='f'>
+                                <div style={{ display: "flex", justifyContent: "space-between" }} className='f'>
                                     <TextField
                                         margin="normal"
                                         padding="5"
-                                        width = "40%"
+
+                                        width="40%"
                                         label="nameHome"
                                         name="nameHome"
                                         value={formik.values.nameHome}
@@ -120,7 +123,7 @@ export default function CreateHome({ setOpenModal }) {
                                     />
                                     <TextField
                                         margin="normal"
-                                        width = "40%"
+                                        width="40%"
                                         label="address"
                                         name="address"
                                         value={formik.values.address}
@@ -129,7 +132,7 @@ export default function CreateHome({ setOpenModal }) {
                                         helperText={formik.touched.address && formik.errors.address}
                                     />
                                 </div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -152,7 +155,7 @@ export default function CreateHome({ setOpenModal }) {
                                     />
                                 </div>
 
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -174,7 +177,7 @@ export default function CreateHome({ setOpenModal }) {
                                         helperText={formik.touched.bathrooms && formik.errors.bathrooms}
                                     />
                                 </div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -186,13 +189,33 @@ export default function CreateHome({ setOpenModal }) {
                                         helperText={formik.touched.description && formik.errors.description}
                                     />
                                 </div>
-                                <div style={{display: 'none'}}>
-    
-                                <TextField
+                                <FormControl>
+                                    <InputLabel htmlFor="selectedOption">Select Option:</InputLabel>
+                                    <Select
+                                        id="category"
+                                        name="category"
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        value={formik.values.selectedOption}
+                                    >
+                                        <MenuItem value="category">
+                                            <em>Select an option</em>
+                                        </MenuItem>
+                                        {categories.map((option) => (
+                                            <MenuItem key={option.idCategory} value={option.idCategory}>
+                                                {option.nameCategory}  <img width={20} height={20} src={option.icon} alt=""/>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                                <div style={{ display: 'none' }}>
+                                    <TextField
                                         name="user"
                                         value={formik.values.user}
                                     />
                                 </div>
+
                                 <Button
                                     type="submit"
                                     fullWidth

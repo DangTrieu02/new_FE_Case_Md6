@@ -1,10 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
-import { createHome, editHome, getAllHome, getHomeById, getHomeByUser } from "../../service/homeService";
+import { createHome, editHome, getAllCategory, getAllHome, getHomeById, getHomeByUser } from "../../service/homeService";
 
 const initialState ={
     list:[],
     userList:[],
-    currentHome:null
+    currentHome:null,
+    catgoryList:[],
 }
 
 const homeSlice = createSlice({
@@ -24,7 +25,7 @@ const homeSlice = createSlice({
         builder.addCase(editHome.fulfilled,(state,action)=>{
             state.userList = action.payload
             for(let i=0; i<state.userList.length;i++){
-                if(state.userList[i] == action.payload.idHome){
+                if(state.userList[i] === action.payload.idHome){
                     state.userList[i]={...action.payload}
                     break;
                 }
@@ -32,6 +33,9 @@ const homeSlice = createSlice({
         })
         builder.addCase(getHomeById.fulfilled,(state,action)=>{
             state.currentHome = action.payload
+        })
+        builder.addCase(getAllCategory.fulfilled,(state,action)=>{
+            state.catgoryList = action.payload
         })
     }
 })

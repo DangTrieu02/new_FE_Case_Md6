@@ -29,7 +29,6 @@ export default function DetailHome() {
                                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
                                     </div>
                                     <div class="carousel-inner">
-
                                         {currentHome.image.length < 2 ?
                                             <div class="carousel-item active">
                                                 <img src={currentHome.image[0].image} class="d-block w-100" alt="..." />
@@ -103,15 +102,34 @@ export default function DetailHome() {
                                     <div className="text-start mb-1-6 wow fadeIn">
                                         <h3 className="h1 mb-0 text-primary">#About home</h3>
                                     </div>
-                                    <p>
-                                    </p>
+                                        <div style={{display: "flex", marginBottom: "20px", padding: "10px 10px"}}>
+                                            <div style={{width: "50%",}}>
+                                                <div style={{width: "50%", textAlign: "center", marginRight: 10,marginBottom: 10, padding: 10}}> 
+                                               <img style={{padding: 10}} src='https://icons.iconarchive.com/icons/icons8/ios7/48/Household-Bed-icon.png' alt=''/>  { currentHome.bedrooms} 
+                                            </div>
+                                            <div style={{width: "50%", textAlign: "center", marginRight: 10, padding: 10}}>
+                                                <img style={{width:50 , height:50}} src='https://cdn2.iconfinder.com/data/icons/real-estate-225/1000/Real_Estate-11-512.png' alt=''/>  { currentHome.floorArea} 
+                                            </div>
+                                            </div>
+                                            
+                                            <div style={{width: "50%",}}>
+                                                <div style={{width: "50%", textAlign: "center", marginRight: 10,marginBottom: 10, padding: 10}}>
+                                                <img style={{width:50 , height:50,padding: 10}} src='https://th.bing.com/th/id/OIP.jckLGyz9I3ZVIaeBDNDVdgHaHW?w=178&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7' alt=''/>  { currentHome.address}
+                                            </div>
+                                            <div style={{width: "50%", textAlign: "center", padding: 10}}>
+                                                <img style={{width:50 , height:50,}} src='https://th.bing.com/th/id/OIP.OAkd_z4s0nggBrlorUFYXAHaHa?w=191&h=191&c=7&r=0&o=5&dpr=1.4&pid=1.7' alt=''/>   { currentHome.bathrooms}
+                                            </div>
+                                            </div>
+                                            
+                                            <div style={{width: "50%",}}>
+                                               
+                                            <div style={{width: "50%", textAlign: "center", padding: 10}}>
+                                                <img style={{width:50 , height:50,}} src='https://th.bing.com/th?q=Money+Icon+Vector&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.4&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=vi&adlt=moderate&t=1&mw=247' alt=''/>   {currentHome.price } 
+                                            </div>
+                                            </div>
+                                        </div>
                                     <p className="mb-0">
-                                        There are many variations of passages of Lorem Ipsum available, but
-                                        the majority have suffered alteration in some form, by injected
-                                        humour, or randomised words which don't look even slightly
-                                        believable. If you are going to use a passage of Lorem Ipsum, you
-                                        need to be sure there isn't anything embarrassing hidden in the
-                                        middle of text.
+                                        des : { currentHome.description}    
                                     </p>
                                 </div>
                                 <div className="mb-5 wow fadeIn">

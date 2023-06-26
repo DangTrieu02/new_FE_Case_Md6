@@ -46,7 +46,7 @@ export default function BasicMenu({ user }) {
 
     const logout = () => {
         localStorage.clear();
-        navigate("/");
+        window.location.href = "/"; // Redirect to the home page
         handleClose();
     };
 

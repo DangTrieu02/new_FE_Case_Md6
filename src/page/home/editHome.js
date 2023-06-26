@@ -24,14 +24,14 @@ import { useEffect } from 'react';
 
 
 const validateSchema = Yup.object().shape({
-    // username: Yup.string()
-    //     .min(6, "Needs to be between 6 and 12 characters long")
-    //     .max(32, "Needs to be between 6 and 12 characters long")
-    //     .required("required"),
-    // password: Yup.string()
-    //     .min(6, "Needs to be between 6 and 12 characters long")
-    //     .max(32, "Needs to be between 6 and 12 characters long")
-    //     .required("required")
+    username: Yup.string()
+        .min(6, "Needs to be between 6 and 12 characters long")
+        .max(32, "Needs to be between 6 and 12 characters long")
+        .required("required"),
+    password: Yup.string()
+        .min(6, "Needs to be between 6 and 12 characters long")
+        .max(32, "Needs to be between 6 and 12 characters long")
+        .required("required")
 
 })
 

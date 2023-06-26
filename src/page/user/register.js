@@ -118,69 +118,90 @@ export default function Register({ setIsLogin }) {
                     </Typography>
                     <Box noValidate sx={{ mt: 1 }}>
                         <form onSubmit={formik.handleSubmit}>
-                            <TextField
-                                margin="normal"
-                                fullWidth
-                                label="Username"
-                                name="username"
-                                value={formik.values.username}
-                                onChange={formik.handleChange}
-                                error={formik.touched.username && Boolean(formik.errors.username)}
-                                helperText={formik.touched.username && formik.errors.username}
-                            />
-                            <TextField
-                                margin="normal"
-                                fullWidth
-                                label="Full name"
-                                name="fullName"
-                                value={formik.values.fullName}
-                                onChange={formik.handleChange}
-                                error={formik.touched.fullName && Boolean(formik.errors.fullName)}
-                                helperText={formik.touched.fullName && formik.errors.fullName}
-                            />
-                            <TextField
-                                margin="normal"
-                                fullWidth
-                                label="Password"
-                                name="password"
-                                type='password'
-                                value={formik.values.password}
-                                onChange={formik.handleChange}
-                                error={formik.touched.password && Boolean(formik.errors.password)}
-                                helperText={formik.touched.password && formik.errors.password}
-                            />
-                            <TextField
-                                margin="normal"
-                                fullWidth
-                                label="Confirm password"
-                                name="confirmPassword"
-                                type='password'
-                                value={formik.values.confirmPassword}
-                                onChange={formik.handleChange}
-                                error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                                helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                            />
-                            <TextField
-                                margin="normal"
-                                fullWidth
-                                label="Phone number"
-                                name="phoneNumber"
-                                type='number'
-                                value={formik.values.phoneNumber}
-                                onChange={formik.handleChange}
-                                error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
-                                helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
-                            />
-                            <select
-                                id="role"
-                                name="role"
-                                value={formik.values.role}
-                                onChange={formik.handleChange}
-                                required
-                            >
-                                <option style={{ color: "black" }} value="user">user</option>
-                                <option style={{ color: "black" }} value="owner">owner</option>
-                            </select>
+                            <div className='register-text-field'>
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="Username"
+                                    name="username"
+                                    value={formik.values.username}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.username && Boolean(formik.errors.username)}
+                                    helperText={formik.touched.username && formik.errors.username}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="Full name"
+                                    name="fullName"
+                                    value={formik.values.fullName}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.fullName && Boolean(formik.errors.fullName)}
+                                    helperText={formik.touched.fullName && formik.errors.fullName}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="Password"
+                                    name="password"
+                                    type='password'
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.password && Boolean(formik.errors.password)}
+                                    helperText={formik.touched.password && formik.errors.password}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="Confirm password"
+                                    name="confirmPassword"
+                                    type='password'
+                                    value={formik.values.confirmPassword}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="Phone number"
+                                    name="phoneNumber"
+                                    type='number'
+                                    value={formik.values.phoneNumber}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                                    helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                                />
+                            </div>
+
+                            <div className='select-option'>
+                                <select
+                                    id="role"
+                                    name="role"
+                                    value={formik.values.role}
+                                    onChange={formik.handleChange}
+                                    required
+                                >
+                                    <option style={{ color: "black" }} value="user">user</option>
+                                    <option style={{ color: "black" }} value="owner">owner</option>
+                                </select>
+                            </div>
+
+                            <div className="custom-select">
+                                <select
+                                    id="role"
+                                    name="role"
+                                    value={formik.values.role}
+                                    onChange={formik.handleChange}
+                                    required
+                                >
+                                    <option value="user">user</option>
+                                    <option value="owner">owner</option>
+                                </select>
+                            </div>
+
+
+
                             <Button
                                 type="submit"
                                 fullWidth

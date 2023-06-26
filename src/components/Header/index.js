@@ -1,138 +1,202 @@
+// Header/index.js
 import React, {useState} from "react";
-import {useDispatch} from "react-redux";
-import {searchHome} from "../../service/homeService";
 import logo from "../../assets/logo/long-logo.png";
 import "./styles.css";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import LanguageIcon from "@mui/icons-material/Language";
 import BasicMenu from "./ProfileMenu";
 import SimpleBottomNavigation from "./BottomNav";
 import MobileSearchBar from "../MobileSearchBar";
-import Box from "@mui/material/Box";
-import Tabs, {tabsClasses} from "@mui/material/Tabs";
-import {links} from "../../assets/images-links";
-import Tab from "@mui/material/Tab";
-
+import {useSelector, useDispatch} from "react-redux";
+import BasicModal from "../../page/home/homeModal";
+import {Link, useLocation} from "react-router-dom";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    FormControl,
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+    TextField,
+} from "@mui/material";
+import {resetFilter, setFilter} from "../../redux/slice/homeSlice";
+import {getHomeByName, getHomeByStatus} from "../../service/homeService";
 
 function Header() {
     const dispatch = useDispatch();
-    const [value, setValue] = React.useState(0);
-    const [selectedFilter, setSelectedFilter] = React.useState(0)
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-    const [searchValue, setSearchValue] = useState("");
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        dispatch(searchHome([searchValue]));
+    const [openModal, setOpenModal] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [searchOption, setSearchOption] = useState("name");
+    const [searchValue, setSearchValue] = useState("");
+    const [searchStatus, setSearchStatus] = useState("available");
+
+    const handleOpenModal = () => {
+        setOpenModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const handleChangeSearchOption = (event) => {
+        setSearchOption(event.target.value);
+    };
+
+    const handleChangeSearchValue = (event) => {
+        setSearchValue(event.target.value);
+    };
+
+    const handleChangeSearchStatus = (event) => {
+        setSearchStatus(event.target.value);
+    };
+
+    const handleSearch = () => {
+        if (searchOption === "name") {
+            // Search by name logic
+            console.log("Searching by name:", searchValue);
+            dispatch(setFilter({nameHome: searchValue}));
+            dispatch(getHomeByName(searchValue));
+        } else {
+            // Search by status logic
+            console.log("Searching by status:", searchStatus);
+            dispatch(setFilter({status: searchStatus}));
+            dispatch(getHomeByStatus(searchStatus));
+        }
+        handleCloseDialog();
+    };
+
+    const user = useSelector(({user}) => {
+        return user.currentUser;
+    });
+
+    const location = useLocation();
+    const currentPath = location.pathname;
+
+    const handleCreateHome = () => {
+        dispatch(resetFilter()); // Reset filter when creating a new home
+        handleCloseModal();
     };
 
     return (
         <>
             <div className="navbar">
-                <img src={logo} alt="logo" className="navbar-logo"/>
-
-                <form onSubmit={handleSearch}>
-                    <div
-                        style={{
-                            marginLeft: 200,
-                            width: 350,
-                            height: 48,
-                            border: "solid lightgray 1px",
-                            borderRadius: 100,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <a style={{borderRight: "solid gray 1px", paddingRight: 5}}>
-                            Anywhere
-                        </a>
-                        <input
-                            type="search"
-                            name="search"
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            style={{width: 220, height: 46, border: "none", outline: "none"}}
+                <img
+                    src={logo}
+                    component={Link}
+                    to="/"
+                    alt="logo"
+                    className="navbar-logo"
+                />
+                <div className="search-bar">
+                    <div className="search-bar-text">Anywhere</div>
+                    <div className="search-bar-text">Any Week</div>
+                    <div className="search-bar-text2">Add guests</div>
+                    <div className="search-icon-div">
+                        <SearchRoundedIcon
+                            className="search-icon"
+                            onClick={handleOpenDialog}
                         />
-                        <button
-                            type="submit"
-                            style={{
-                                borderRadius: 100,
-                                backgroundColor: "#FF385c",
-                                border: "none",
-                            }}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="white"
-                                className="bi bi-search"
-                                viewBox="0 0 16 16"
-                            >
-                                <path
-                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-                                />
-                            </svg>
-                        </button>
+                        <MobileSearchBar/>
                     </div>
-                </form>
-
+                </div>
                 <div className="profile-container">
-                    <div className="airbnb-your-home">Airbnb your home</div>
+                    {currentPath === "/owner" && user && (
+                        <div className="airbnb-your-home" onClick={handleOpenModal}>
+                            {" "}
+                            Add your home here
+                        </div>
+                    )}
                     <div className="airbnb-your-home">
                         <LanguageIcon sx={{fontSize: "1.3rem"}}/>
                     </div>
                     <div className="profile-div">
-                        <BasicMenu/>
+                        <BasicMenu user={user}/>
                     </div>
                 </div>
-                <MobileSearchBar/>
+
                 <SimpleBottomNavigation/>
             </div>
-            <div className="filter-div">
-                <Box
-                    sx={{
-                        flexGrow: 1,
-                        maxWidth: {xs: 150, sm: 1360},
-                        bgcolor: 'background.paper',
-                    }}
-                >
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        variant="scrollable"
-                        scrollButtons
-                        aria-label="visible arrows tabs example"
-                        sx={{
-                            [`& .${tabsClasses.scrollButtons}`]: {
-                                '&.Mui-disabled': {opacity: 0.3},
-                            },
-                        }}
-                    >
 
-                        {links.map((item, i) => (
-                            <div
-                                key={i}
-                                className={`links-box ${i === selectedFilter && "selected-box"}`}
-                                onClick={() => {
-                                    console.log("selecting key", i);
-                                    setSelectedFilter(i);
-                                }}
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Select Search Option</DialogTitle>
+                <DialogContent>
+                    <FormControl component="fieldset">
+                        <RadioGroup
+                            aria-label="searchOption"
+                            name="searchOption"
+                            value={searchOption}
+                            onChange={handleChangeSearchOption}
+                        >
+                            <FormControlLabel
+                                value="name"
+                                control={<Radio/>}
+                                label="Search by name"
+                            />
+                            <FormControlLabel
+                                value="status"
+                                control={<Radio/>}
+                                label="Search by status"
+                            />
+                        </RadioGroup>
+                    </FormControl>
+                    {searchOption === "name" ? (
+                        <TextField
+                            label="Search by name"
+                            variant="outlined"
+                            value={searchValue}
+                            onChange={handleChangeSearchValue}
+                        />
+                    ) : (
+                        <FormControl component="fieldset">
+                            <RadioGroup
+                                aria-label="searchStatus"
+                                name="searchStatus"
+                                value={searchStatus}
+                                onChange={handleChangeSearchStatus}
                             >
-                                <img src={item.imgSrc} className="links-img"/>
-                                <p
-                                    className={`links-label ${i === selectedFilter && "selected-label"}`}
-                                >
-                                    <Tab label={item.label}/>
+                                <FormControlLabel
+                                    value="available"
+                                    control={<Radio/>}
+                                    label="Available"
+                                />
+                                <FormControlLabel
+                                    value="hiring"
+                                    control={<Radio/>}
+                                    label="Hiring"
+                                />
+                                <FormControlLabel
+                                    value="unavailable"
+                                    control={<Radio/>}
+                                    label="Unavailable"
+                                />
+                            </RadioGroup>
+                        </FormControl>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleSearch} variant="contained">
+                        Search
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
-                                </p>
-                            </div>
-                        ))}
-                    </Tabs>
-                </Box>
-            </div>
+            <BasicModal
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                handleCreateHome={handleCreateHome}
+            />
         </>
     );
 }

@@ -1,15 +1,18 @@
+// Cards/index.js
+
 import React from "react";
 import Card from "./card";
 import "./styles.css";
 function Cards({ list }) {
-  console.log(list);
-  return (
-    <div className="cards-flex">
-      {list.map((card, i) => (
-        <Card card={card} key={i} />
-      ))}
-    </div>
-  );
+    return (
+        <>
+            <div className="cards-flex">
+                {list.map((card, i) => (
+                    <Card card={card}  key={i} />
+                ))}
+            </div>
+        </>
+    );
 }
 
 export default Cards;

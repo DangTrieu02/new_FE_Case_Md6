@@ -1,4 +1,5 @@
-import React from "react";
+// Cards/card.js
+import React, { useState } from "react";
 import "./styles.css";
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,8 +9,9 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
 
 function Card({card}) {
-    console.log(card)
+  const [openModal,setOpenModal]= useState(false);
   return (
+    <>
     <div className="card-box">
       <Swiper
         slidesPerView={1}
@@ -21,25 +23,31 @@ function Card({card}) {
         modules={[Pagination, Navigation]}
         className="swiper-container"
       >
-        {card.imageSrc && card.imageSrc.map((src, i) => (
+        {card.image && card.image.map((src, i) => ( 
           <SwiperSlide key={i}>
-            <img src={src} className="card-img"  alt={"abc"}/>
+            <img src={src.image} className="card-img" />
           </SwiperSlide>
         ))}
       </Swiper>
       <div className="card-info-flex">
-        <h3 className="card-title">{card.floorArea}</h3>
+        <h3 className="card-title">{card.nameHome}</h3>
+        <div className="edit">
+          {/* <button component={Link} to="/owner/editHome"> Edit</button> */}
         <div className="card-rating">
           <StarRateRoundedIcon />
           <p>{card.status}</p>
         </div>
+        </div>
       </div>
-      <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.nameHome}</p>
+      <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.floorArea} m2</p>
       <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.address}</p>
       <p style={{ margin: "0.2rem", fontSize: "1rem", color: "var(--black" }}>
-        <span style={{ fontWeight: "600" }}>₹{card.price}</span> night
+        <span style={{ fontWeight: "600" }}>${card.price}</span> / night
       </p>
+
     </div>
+    
+    </>
   );
 }
 

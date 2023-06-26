@@ -1,71 +1,70 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+// homeService.js
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import customAxios from "./api";
 
-export const searchHome = createAsyncThunk(
-    "homes/searchHome",
-    async (data) => {
-        const res = await customAxios.get(`/homes/find-by-address?address=${data}`, {
-            headers: {
-                "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("access-token"),
-            },
-        });
-        return res.data;
-    }
-);
-export const searchHomeUpgrade = createAsyncThunk(
-    "homes/searchHomes",
-    async (data) => {
-        const res = await customAxios.get(`/homes/search?=${data}`, {
-            headers: {
-                "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("access-token"),
-            },
-        });
-
-        return res.data;
-    }
-);
-export const getHomeById = createAsyncThunk("homes/getHome", async (data) => {
-    const res = await customAxios.get("homes/find-by-id/" + data,
-        { headers: {
-                'Content-Type': 'application/json',
-                authorization: 'Bearer ' + localStorage.getItem('access-token'),
-            }});
-    return res.data;
-});
-export const getHomes = createAsyncThunk("homes/getHomes", async (page) => {
-    const res = await customAxios.get("homes?page=" + page);
+export const getAllHome = createAsyncThunk("homes/findAll", async () => {
+    const res = await customAxios.get("homes/");
     return res.data;
 });
 
-export const getAllHome = createAsyncThunk("homes/getAllHome",async()=>{
-    const res = await customAxios.get("homes")
-    return res.data
-})
-export const getHomeForRent = createAsyncThunk(
-    "homes/getHomeForRent",
-    async (page) => {
-        const res = await customAxios.get('/homes/for-rent?page='+page,
-            { headers: {
-                    'Content-Type': 'application/json',
-                    authorization: 'Bearer ' + localStorage.getItem('access-token'),
-                }})
-        return res.data;
-    })
-
-export const getHomeRented = createAsyncThunk(
-    "homes/getHomeRented",
-    async (page) => {
-        const res = await customAxios.get('/homes/rented?page='+page,
-            { headers: {
-                    'Content-Type': 'application/json',
-                    authorization: 'Bearer ' + localStorage.getItem('access-token'),
-                }})
-        return res.data;
-    })
-
-
-export const createHome = createAsyncThunk("homes/createHome",async()=>{
-    
+export const createHome = createAsyncThunk("homes/addHome", async (data) => {
+    const res = await customAxios.post("homes/", data);
+    return res.data;
 });
+
+export const getHomeByUser = createAsyncThunk(
+    `homes/getHomeByUser`,
+    async (id) => {
+        const res = await customAxios.get(`homes/user/${id}`);
+        console.log(res.data, id, "homeservice");
+        return res.data;
+    }
+);
+
+export const getHomeById = createAsyncThunk(`homes/getHomeById`, async (id) => {
+    const res = await customAxios.put(`homes/${id}`);
+    return res.data;
+});
+
+export const getHomeByCategory = createAsyncThunk(
+    `homes/getHomeByCategory`,
+    async (categoryId) => {
+        const res = await customAxios.get(`homes/categories/${categoryId}`);
+        return res.data;
+    }
+);
+
+export const getHomeByPrice = createAsyncThunk(
+    `homes/getHomeByPrice`,
+    async ({min, max}) => {
+        const res = await customAxios.get(`homes/price?min=${min}&max=${max}`);
+        return res.data;
+    }
+);
+
+export const getHomeByName = createAsyncThunk(
+    `homes/getHomeByName`,
+    async (nameHome) => {
+        const res = await customAxios.get(`homes/filter?nameHome=${nameHome}`);
+        console.log(res.data);
+        return res.data;
+    }
+);
+
+export const getHomeByStatus = createAsyncThunk(
+    `homes/getHomeByStatus`,
+    async (status) => {
+        const res = await customAxios.get(`homes/status?status=${status}`);
+        return res.data;
+    }
+);
+
+export const getHomeByAddress = createAsyncThunk(
+    "homes/getHomeByAddress",
+    async (address) => {
+        const res = await customAxios.get(
+            `homes/find-by-address?address=${address}`
+        );
+        return res.data;
+    }
+);

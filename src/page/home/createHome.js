@@ -19,8 +19,9 @@ import { useEffect } from 'react';
 const validateSchema = Yup.object().shape({
     nameHome: Yup.string()
         .required("required"),
-        address: Yup.string()
+    address: Yup.string()
         .required("required")
+
 })
 
 function Copyright(props) {
@@ -35,7 +36,6 @@ function Copyright(props) {
         </Typography>
     );
 }
-
 
 const defaultTheme = createTheme();
 
@@ -63,12 +63,12 @@ export default function CreateHome({ setOpenModal }) {
     if (user) {
         userId = user.idUser
     }
-     useEffect(() => {
-            dispatch(getAllCategory())
-          }, []);
+    useEffect(() => {
+        dispatch(getAllCategory())
+    }, []);
 
     const formik = useFormik({
-                 
+
         initialValues: {
             nameHome: '',
             address: "",
@@ -177,7 +177,7 @@ export default function CreateHome({ setOpenModal }) {
                                         helperText={formik.touched.bathrooms && formik.errors.bathrooms}
                                     />
                                 </div>
-                                <div style={{display:"flex" , justifyContent:"space-between"}}>
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
                                     <TextField
                                         margin="normal"
                                         fullWidth

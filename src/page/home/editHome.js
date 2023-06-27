@@ -1,4 +1,3 @@
-// editHome.js
 import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
@@ -23,14 +22,14 @@ import { editHome, getHomeById } from '../../service/homeService';
 import swal from "sweetalert";
 
 const validateSchema = Yup.object().shape({
-    username: Yup.string()
-        .min(6, "Needs to be between 6 and 12 characters long")
-        .max(32, "Needs to be between 6 and 12 characters long")
-        .required("required"),
-    password: Yup.string()
-        .min(6, "Needs to be between 6 and 12 characters long")
-        .max(32, "Needs to be between 6 and 12 characters long")
-        .required("required")
+    // username: Yup.string()
+    //     .min(6, "Needs to be between 6 and 12 characters long")
+    //     .max(32, "Needs to be between 6 and 12 characters long")
+    //     .required("required"),
+    // password: Yup.string()
+    //     .min(6, "Needs to be between 6 and 12 characters long")
+    //     .max(32, "Needs to be between 6 and 12 characters long")
+    //     .required("required")
 
 })
 
@@ -88,14 +87,14 @@ export default function EditHome() {
 
                             <div className="row justify-content-center mt-2">
                                 <div className='col-9'>
-                                <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />    
+                                    <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />
                                 </div>
                                 <div className='col-3'>
-                                <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />    
-                                <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />   
-                                <img src={currentHome.image[0].image} class="d-block w-100 mb-4 " alt="..." />               
+                                    <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />
+                                    <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />
+                                    <img src={currentHome.image[0].image} class="d-block w-100 mb-4 " alt="..." />
                                 </div>
-                            </div>  
+                            </div>
                         </div>
                         <div className="col-lg-6">
                             <div className="ps-lg-1-6 ps-xl-5">

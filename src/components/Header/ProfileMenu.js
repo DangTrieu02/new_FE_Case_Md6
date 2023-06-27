@@ -100,9 +100,6 @@ export default function BasicMenu({ user }) {
           }}
         />
 
-        <MenuItem onClick={handleClose} className="menu-items">
-          Host an experience
-        </MenuItem>
 
         {
           user && user ? (
@@ -112,7 +109,7 @@ export default function BasicMenu({ user }) {
           ) :
             <>
               <MenuItem className="menu-items" onClick={handleOpenModal}>
-                login/register
+                Login
               </MenuItem>
               <MenuItem className="menu-items">
                 <GoogleLogin
@@ -122,8 +119,7 @@ export default function BasicMenu({ user }) {
                   }}
                   onError={(err) => console.log(err)}
                   containerClass="<your_custom_class>"
-                >
-                  Google Login
+                >Login Google
                 </GoogleLogin>
               </MenuItem>
             </>

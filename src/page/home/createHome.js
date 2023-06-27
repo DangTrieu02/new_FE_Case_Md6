@@ -21,7 +21,6 @@ const validateSchema = Yup.object().shape({
         .required("required"),
         address: Yup.string()
         .required("required")
-
 })
 
 function Copyright(props) {

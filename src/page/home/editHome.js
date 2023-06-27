@@ -53,6 +53,7 @@ export default function EditHome() {
                 buttons: "close",
             });
             navigate('/owner')
+            window.location.reload()
         });
     };
 

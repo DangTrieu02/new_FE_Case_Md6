@@ -34,31 +34,32 @@ function Card({ card }) {
         >
           {card.image && card.image.map((src, i) => (
             <SwiperSlide key={i}>
-              {console.log(src)}
               <img onClick={()=>navigate(`/detailHome/${card.idHome}`)} src={src.image} className="card-img" alt="" />
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="card-info-flex">
-          <h3 className="card-title">{card.nameHome}</h3>
-          <div className="edit">
-            <div className="card-rating">
-              <StarRateRoundedIcon />
+        <div style={{padding: '5px 15px'}}>
+          <div className="card-info-flex">
+            <h4 className="card-title">{card.nameHome}</h4>
+            <div className="edit">
+              <div className="card-rating">
+                <StarRateRoundedIcon />
+              </div>
             </div>
           </div>
+          <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.floorArea} m2</p>
+          <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.address}</p>
+          <p style={{ margin: "0.2rem", fontSize: "1rem", color: "var(--black" }}>
+            <span style={{ fontWeight: "600" }}>${card.price}</span> / night
+          </p>
+          {
+              currentPath === "/owner" &&
+              <div class="box" >
+                <img onClick={()=>navigate(`/editHome/${card.idHome}`)} src="https://icons.iconarchive.com/icons/arturo-wibawa/akar/24/edit-icon.png" alt="" />
+                <img src="https://icons.iconarchive.com/icons/pictogrammers/material/24/delete-forever-outline-icon.png" alt="" />
+              </div>
+          }
         </div>
-        <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.floorArea} m2</p>
-        <p style={{ margin: 0, color: "var(--font-grey)" }}>{card.address}</p>
-        <p style={{ margin: "0.2rem", fontSize: "1rem", color: "var(--black" }}>
-          <span style={{ fontWeight: "600" }}>${card.price}</span> / night
-        </p>
-        {
-          currentPath === "/owner" &&
-            <div class="box" >
-              <img onClick={()=>navigate(`/editHome/${card.idHome}`)} src="https://icons.iconarchive.com/icons/arturo-wibawa/akar/24/edit-icon.png" alt="" />
-              <img src="https://icons.iconarchive.com/icons/pictogrammers/material/24/delete-forever-outline-icon.png" alt="" />
-            </div>
-        }
       </div>
 
     </>

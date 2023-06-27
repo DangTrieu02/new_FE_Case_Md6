@@ -107,13 +107,15 @@ function Header() {
     return (
         <>
             <div className="navbar">
-                <img
-                    src={logo}
-                    component={Link}
-                    to="/"
-                    alt="logo"
-                    className="navbar-logo"
-                />
+                <Link to={'/'}>
+                    <img
+                        src={logo}
+                        component={Link}
+                        to="/"
+                        alt="logo"
+                        className="navbar-logo"
+                    />
+                </Link>
                 <div className="search-bar">
                     <div className="search-bar-text">Anywhere</div>
                     <div className="search-bar-text">Any Week</div>

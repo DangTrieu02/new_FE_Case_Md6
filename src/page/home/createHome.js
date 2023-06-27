@@ -36,6 +36,7 @@ function Copyright(props) {
     );
 }
 
+
 const defaultTheme = createTheme();
 
 export default function CreateHome({ setOpenModal }) {
@@ -67,7 +68,7 @@ export default function CreateHome({ setOpenModal }) {
           }, []);
 
     const formik = useFormik({
-
+                 
         initialValues: {
             nameHome: '',
             address: "",
@@ -176,7 +177,7 @@ export default function CreateHome({ setOpenModal }) {
                                         helperText={formik.touched.bathrooms && formik.errors.bathrooms}
                                     />
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div style={{display:"flex" , justifyContent:"space-between"}}>
                                     <TextField
                                         margin="normal"
                                         fullWidth

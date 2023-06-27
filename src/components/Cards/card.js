@@ -1,3 +1,4 @@
+// Cards/card.js
 import React, { useState } from "react";
 import "./styles.css";
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
@@ -33,6 +34,7 @@ function Card({ card }) {
         >
           {card.image && card.image.map((src, i) => (
             <SwiperSlide key={i}>
+              {console.log(src)}
               <img onClick={()=>navigate(`/detailHome/${card.idHome}`)} src={src.image} className="card-img" alt="" />
             </SwiperSlide>
           ))}

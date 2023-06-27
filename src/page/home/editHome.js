@@ -1,3 +1,4 @@
+// editHome.js
 import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
@@ -22,14 +23,14 @@ import { editHome, getHomeById } from '../../service/homeService';
 import swal from "sweetalert";
 
 const validateSchema = Yup.object().shape({
-    // username: Yup.string()
-    //     .min(6, "Needs to be between 6 and 12 characters long")
-    //     .max(32, "Needs to be between 6 and 12 characters long")
-    //     .required("required"),
-    // password: Yup.string()
-    //     .min(6, "Needs to be between 6 and 12 characters long")
-    //     .max(32, "Needs to be between 6 and 12 characters long")
-    //     .required("required")
+    username: Yup.string()
+        .min(6, "Needs to be between 6 and 12 characters long")
+        .max(32, "Needs to be between 6 and 12 characters long")
+        .required("required"),
+    password: Yup.string()
+        .min(6, "Needs to be between 6 and 12 characters long")
+        .max(32, "Needs to be between 6 and 12 characters long")
+        .required("required")
 
 })
 

@@ -19,7 +19,22 @@ export default function BasicMenu({ user }) {
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+    const [openModal, setOpenModal] = useState(false);
+    const handleOpenModal = () => {
+        setOpenModal(true);
+    };
 
+    const logout = () => {
+        localStorage.clear();
+        window.location.href = "/"; // Redirect to the home page
+        handleClose();
+    };
+
+    const loginGoogle = async (values) => {
+        await dispatch(loginWithGoogle(values)).then(() => {
+            navigate("/");
+        });
+    };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -31,21 +46,6 @@ export default function BasicMenu({ user }) {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  }
-  const logout = () => {
-    localStorage.clear();
-    navigate('/')
-    window.location.reload();
-  }
-  const loginGoogle = async (values) => {
-    await dispatch(loginWithGoogle(values)).then(() => {
-      navigate("/");
-    })
-
-  }
   return (
     <div>
       <div

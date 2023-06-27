@@ -6,5 +6,6 @@ const store = configureStore({
         user:userReducer,
         home:homeReducer
     }
+
 })
 export default store

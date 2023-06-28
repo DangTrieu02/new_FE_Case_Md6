@@ -16,7 +16,7 @@ const homeSlice = createSlice({
             state.list = action.payload
         })
         builder.addCase(addHome.fulfilled, (state, action) => {
-            state.homes.homes.push(action.payload);
+            state.list = action.payload
         });
         builder.addCase(getHomeByUser.fulfilled,(state,action)=>{
             state.userList = action.payload

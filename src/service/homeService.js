@@ -7,12 +7,13 @@ export const getAllHome = createAsyncThunk("homes/getAllHome",async()=>{
 })
 
 export const addHome = createAsyncThunk("homes/addHome", async (data) => {
-    const res = await customAxios.post("homes/", data,
+    await customAxios.post("homes/", data,
         { headers: {
                 'Content-Type': 'application/json',
                 authorization: 'Bearer ' + localStorage.getItem('access-token'),
             }});
-    return res.data;
+    const res = await customAxios.get("homes/")
+    return res.data
 });
 
 export const getHomeByUser = createAsyncThunk(`homes/getHomeByUser`,async(id)=>{

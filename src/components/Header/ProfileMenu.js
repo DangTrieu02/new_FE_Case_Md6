@@ -19,7 +19,22 @@ export default function BasicMenu({ user }) {
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+    const [openModal, setOpenModal] = useState(false);
+    const handleOpenModal = () => {
+        setOpenModal(true);
+    };
 
+    const logout = () => {
+        localStorage.clear();
+        window.location.href = "/"; // Redirect to the home page
+        handleClose();
+    };
+
+    const loginGoogle = async (values) => {
+        await dispatch(loginWithGoogle(values)).then(() => {
+            navigate("/");
+        });
+    };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -31,21 +46,6 @@ export default function BasicMenu({ user }) {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  }
-  const logout = () => {
-    localStorage.clear();
-    navigate('/')
-    window.location.reload();
-  }
-  const loginGoogle = async (values) => {
-    await dispatch(loginWithGoogle(values)).then(() => {
-      navigate("/");
-    })
-
-  }
   return (
     <div>
       <div
@@ -100,9 +100,6 @@ export default function BasicMenu({ user }) {
           }}
         />
 
-        <MenuItem onClick={handleClose} className="menu-items">
-          Host an experience
-        </MenuItem>
 
         {
           user && user ? (
@@ -112,7 +109,7 @@ export default function BasicMenu({ user }) {
           ) :
             <>
               <MenuItem className="menu-items" onClick={handleOpenModal}>
-                login/register
+                Login
               </MenuItem>
               <MenuItem className="menu-items">
                 <GoogleLogin
@@ -122,8 +119,7 @@ export default function BasicMenu({ user }) {
                   }}
                   onError={(err) => console.log(err)}
                   containerClass="<your_custom_class>"
-                >
-                  Google Login
+                >Login Google
                 </GoogleLogin>
               </MenuItem>
             </>

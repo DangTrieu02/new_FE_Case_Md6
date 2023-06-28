@@ -77,7 +77,7 @@ export default function CreateHome({ setOpenModal }) {
             floorArea: '',
             bedrooms: '',
             bathrooms: '',
-            status: "",
+            status: " ",
             user: userId,
             category: '',
             Image: "https://th.bing.com/th?q=Nha+O+My&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.4&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=vi&adlt=moderate&t=1&mw=247"
@@ -108,11 +108,10 @@ export default function CreateHome({ setOpenModal }) {
 
                         <form onSubmit={formik.handleSubmit}>
                             <div>
-                                <div style={{ display: "flex", justifyContent: "space-between" }} className='f'>
+                                <div style={{ display: "flex", justifyContent: "space-evenly" }} className='f'>
                                     <TextField
                                         margin="normal"
                                         padding="5"
-
                                         width="40%"
                                         label="nameHome"
                                         name="nameHome"
@@ -120,6 +119,7 @@ export default function CreateHome({ setOpenModal }) {
                                         onChange={formik.handleChange}
                                         error={formik.touched.nameHome && Boolean(formik.errors.nameHome)}
                                         helperText={formik.touched.nameHome && formik.errors.nameHome}
+                                        style={{margin:10}}
                                     />
                                     <TextField
                                         margin="normal"
@@ -130,9 +130,10 @@ export default function CreateHome({ setOpenModal }) {
                                         onChange={formik.handleChange}
                                         error={formik.touched.address && Boolean(formik.errors.address)}
                                         helperText={formik.touched.address && formik.errors.address}
+                                        style={{margin:10}}
                                     />
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -142,6 +143,7 @@ export default function CreateHome({ setOpenModal }) {
                                         onChange={formik.handleChange}
                                         error={formik.touched.price && Boolean(formik.errors.price)}
                                         helperText={formik.touched.price && formik.errors.price}
+                                        style={{margin:10}}
                                     />
                                     <TextField
                                         margin="normal"
@@ -152,10 +154,11 @@ export default function CreateHome({ setOpenModal }) {
                                         onChange={formik.handleChange}
                                         error={formik.touched.floorArea && Boolean(formik.errors.floorArea)}
                                         helperText={formik.touched.floorArea && formik.errors.floorArea}
+                                        style={{margin:10}}
                                     />
                                 </div>
 
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -165,6 +168,7 @@ export default function CreateHome({ setOpenModal }) {
                                         onChange={formik.handleChange}
                                         error={formik.touched.bedrooms && Boolean(formik.errors.bedrooms)}
                                         helperText={formik.touched.bedrooms && formik.errors.bedrooms}
+                                        style={{margin:10}}
                                     />
                                     <TextField
                                         margin="normal"
@@ -175,9 +179,10 @@ export default function CreateHome({ setOpenModal }) {
                                         onChange={formik.handleChange}
                                         error={formik.touched.bathrooms && Boolean(formik.errors.bathrooms)}
                                         helperText={formik.touched.bathrooms && formik.errors.bathrooms}
+                                        style={{margin:10}}
                                     />
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                                     <TextField
                                         margin="normal"
                                         fullWidth
@@ -187,16 +192,19 @@ export default function CreateHome({ setOpenModal }) {
                                         onChange={formik.handleChange}
                                         error={formik.touched.description && Boolean(formik.errors.description)}
                                         helperText={formik.touched.description && formik.errors.description}
+                                        style={{margin:10}}
                                     />
                                 </div>
                                 <FormControl>
-                                    <InputLabel htmlFor="selectedOption">Select Option:</InputLabel>
+                                    <InputLabel htmlFor="selectedOption" style={{margin:10}}>Select Option:</InputLabel>
                                     <Select
                                         id="category"
                                         name="category"
+                                        fullWidth
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.selectedOption}
+                                        style={{margin:20}}
                                     >
                                         <MenuItem value="category">
                                             <em>Select an option</em>

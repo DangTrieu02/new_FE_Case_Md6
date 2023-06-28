@@ -25,8 +25,8 @@ export const getHomeById = createAsyncThunk(`homes/getHomeById`,async(id)=>{
     const res= await customAxios.get(`/homes/${id}`)
     return res.data
 });
-export const getAllCategory = createAsyncThunk(`homes/getAllCategory`,async()=>{
-    const res= await customAxios.get(`/homes/category`)
+export const getAllCategory = createAsyncThunk(`homes/getAllCategories`,async()=>{
+    const res= await customAxios.get(`/categories`)
     return res.data
 });
 

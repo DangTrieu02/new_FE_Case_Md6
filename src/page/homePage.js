@@ -17,13 +17,16 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@m
 import Button from "@mui/material/Button";
 
 function HomePage() {
-    const homes = useSelector((state) => state.home.list);
+  console.log('day la home')
+  const homes = useSelector(({ home }) => {
+    return home.list
+  })
     const filters = useSelector((state) => state.home.filters);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
 
-    useEffect(() => {
-        dispatch(getAllHome());
-    }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAllHome())
+  }, []);
 
     const [selectedFilter, setSelectedFilter] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
@@ -96,4 +99,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default HomePage

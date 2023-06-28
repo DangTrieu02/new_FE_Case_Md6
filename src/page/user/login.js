@@ -1,3 +1,4 @@
+// login.js
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -33,22 +34,50 @@ function Login({ setIsLogin, setOpenModal }) {
   const navigate = useNavigate()
 
   const handleLogin = async (values) => {
-    const response = await dispatch(login(values));
-    setOpenModal(false);
-    if (response.payload && response.payload.role) {
-      // Do something if login is successful and user has a role
-    } else if (response.payload === "user not found") {
+    try {
+      const response = await dispatch(login(values));
+      if (response.payload && response.payload.role) {
+        // Save the token to localStorage
+        localStorage.setItem("token", response.payload.token);
+        // Show success message
+        swal({
+          title: "Login successful!",
+          text: "You are now logged in.",
+          icon: "success",
+          buttons: "close",
+        });
+        // Close the dialog or perform any other action
+        setOpenModal(false);
+      } else if (response.payload === "user not found") {
+        swal({
+          title: "User not found!",
+          icon: "error",
+          buttons: "close",
+        });
+      } else if (response.payload === "wrong password") {
+        swal({
+          title: "Wrong password!",
+          icon: "error",
+          buttons: "close",
+        });
+      } else {
+        swal({
+          title: "Login failed!",
+          icon: "error",
+          buttons: "close",
+        });
+        // Handle login failure here, such as resetting the form
+        formik.resetForm();
+      }
+    } catch (error) {
       swal({
-        title: "User not found!",
+        title: "Login failed!",
+        text: error.message,
         icon: "error",
         buttons: "close",
       });
-    } else if (response.payload === "wrong password") {
-      swal({
-        title: "Wrong password!",
-        icon: "error",
-        buttons: "close",
-      });
+      // Handle login failure here, such as resetting the form
+      formik.resetForm();
     }
   };
 

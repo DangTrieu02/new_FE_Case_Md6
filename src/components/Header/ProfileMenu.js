@@ -1,4 +1,5 @@
 // Header/ProfileMenu.js
+
 import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -46,7 +47,7 @@ export default function BasicMenu({ user }) {
 
     const logout = () => {
         localStorage.clear();
-        navigate("/");
+        window.location.href = "/"; // Redirect to the home page
         handleClose();
     };
 

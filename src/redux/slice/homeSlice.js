@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import { createHome, editHome, getAllCategory, getAllHome, getHomeById, getHomeByUser } from "../../service/homeService";
+import {createHome, editHome, getAllCategory, getAllHome, getHomeById, getHomeByUser} from "../../service/homeService";
 import {
     getHomeByCategory,
     getHomeByAddress,
@@ -12,7 +12,7 @@ const initialState = {
     list: [],
     userList: [],
     currentHome: null,
-    catgoryList:[],
+    categoryList: [],
     filters: {
         category: "",
         address: "",
@@ -55,11 +55,11 @@ const homeSlice = createSlice({
         builder.addCase(getHomeByUser.fulfilled, (state, action) => {
             state.userList = action.payload;
         });
-        builder.addCase(editHome.fulfilled,(state,action)=>{
+        builder.addCase(editHome.fulfilled, (state, action) => {
             state.userList = action.payload
-            for(let i=0; i<state.userList.length;i++){
-                if(state.userList[i] === action.payload.idHome){
-                    state.userList[i]={...action.payload}
+            for (let i = 0; i < state.userList.length; i++) {
+                if (state.userList[i] === action.payload.idHome) {
+                    state.userList[i] = {...action.payload}
                     break;
                 }
             }
@@ -67,8 +67,8 @@ const homeSlice = createSlice({
         builder.addCase(getHomeById.fulfilled, (state, action) => {
             state.currentHome = action.payload;
         });
-        builder.addCase(getAllCategory.fulfilled,(state,action)=>{
-            state.catgoryList = action.payload
+        builder.addCase(getAllCategory.fulfilled, (state, action) => {
+            state.categoryList = action.payload
         })
         builder.addCase(getHomeByCategory.fulfilled, (state, action) => {
             state.list = action.payload;

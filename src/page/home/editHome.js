@@ -17,7 +17,7 @@ import * as Yup from "yup";
 import swal from "sweetalert";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createHome, getHomeById } from '../../service/homeService';
+import { addHome, getHomeById } from '../../service/homeService';
 import { useEffect } from 'react';
 
 
@@ -54,7 +54,7 @@ const navigate = useNavigate()
 
 const handleCreate = async (values) => {
 
-    await dispatch(createHome(values)).then(() => {
+    await dispatch(addHome(values)).then(() => {
         swal({
             title: "Create success !",
             icon: "success",

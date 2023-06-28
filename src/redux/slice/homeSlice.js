@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import { createHome, editHome, getAllHome, getHomeById, getHomeByUser } from "../../service/homeService";
+import { addHome, editHome, getAllHome, getHomeById, getHomeByUser } from "../../service/homeService";
 
 const initialState ={
     list:[],
@@ -15,9 +15,9 @@ const homeSlice = createSlice({
         builder.addCase(getAllHome.fulfilled,(state,action)=>{
             state.list = action.payload
         })
-        builder.addCase(createHome.fulfilled,(state,action)=>{
-            state.list.push(action.payload)
-        })
+        builder.addCase(addHome.fulfilled, (state, action) => {
+            state.homes.homes.push(action.payload);
+        });
         builder.addCase(getHomeByUser.fulfilled,(state,action)=>{
             state.userList = action.payload
         })

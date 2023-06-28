@@ -1,294 +1,225 @@
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useFormik} from "formik";
-import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import swal from "sweetalert";
-import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
-import {createHome} from '../../service/homeService';
-import React, {useState, useEffect} from "react";
-import {Input, Stack} from "@mui/material";
-import Card from "../../components/Cards/card";
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {storage} from "./firebase";
-import CardMedia from '@mui/material/CardMedia';
+import * as Yup from "yup";
 
+import { storage } from "./firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
+import { addHome } from "../../service/homeService";
+import { getCategories } from "../../service/categoryService";
 const validateSchema = Yup.object().shape({
-    // username: Yup.string()
-    //     .min(6, "Needs to be between 6 and 12 characters long")
-    //     .max(32, "Needs to be between 6 and 12 characters long")
-    //     .required("required"),
-    // password: Yup.string()
-    //     .min(6, "Needs to be between 6 and 12 characters long")
-    //     .max(32, "Needs to be between 6 and 12 characters long")
-    //     .required("required")
+    nameHome: Yup.string()
+        .min(2, "Too short!")
+        .max(50, "Too long!")
+        .required("Required"),
+    address: Yup.string()
+        .min(2, "Too short!")
+        .max(50, "Too long!")
+        .required("Required"),
+    description: Yup.string()
+        .min(2, "Too short!")
+        .max(500, "Too long!")
+        .required("Required"),
+});
 
-})
-
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
-
-const defaultTheme = createTheme();
-
-export default function CreateHome({setOpenModal}) {
-    const [uploadedImage, setUploadedImage] = useState([]);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [selectedIndex, setSelectedIndex] = useState(null);
-    const [dialogOpen, setDialogOpen] = useState(false);
-
-
-    const handleImageClick = (index) => {
-        setSelectedIndex(index);
-        setSelectedImage(uploadedImage[index]);
-        setDialogOpen(true);
-    };
-    const user = useSelector(({user}) => {
-        return user.currentUser
-    })
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const [imageUpload, setImageUpload] = useState(null);
-    const [imageUrls, setImageUrls] = useState([]);
-
-    const handleCreate = async (values) => {
-
-        await dispatch(createHome(values)).then(() => {
-            setOpenModal(false)
-            swal({
-                title: "Create success !",
-                icon: "success",
-                buttons: "close",
-            });
-        });
-        window.location.reload()
-    };
-    let userId;
-    if (user) {
-        userId = user.idUser
-    }
-
-
-    const formik = useFormik({
-        initialValues: {
-            nameHome: '',
-            address: "",
-            description: "",
-            price: '',
-            floorArea: '',
-            bedrooms: '',
-            bathrooms: '',
-            status: "For rent",
-            user: userId,
-            category: 2,
-            image: imageUrls
-        },
-        enableReinitialize: true,
-        validationSchema: validateSchema,
-        onSubmit: (values) => {
-            console.log(values)
-            // handleCreate(values)
-        },
+export default function CreateHome() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => {
+        return state.user.currentUser;
     });
-    const handleUpload = async (event) => {
-        const file = event.target.files[0];
-        const storageRef = ref(storage);
-        const timestamp = Date.now();
-        const fileRef = ref(storageRef, `${timestamp}_${file.name}`);
-        try {
-            // for (let i = 0; i < file.length; i++) {
-            //     const file = file[i]
-            if (uploadedImage.length < 4) {
-                await uploadBytes(fileRef, file);
-                const imageUrl = await getDownloadURL(fileRef);
-                console.log(imageUrl)
-                setImageUrls([...imageUrls, imageUrl])
-            } else {
-                setErrorMessage("limit 4 image");
-                setSnackbarOpen(true);
-            }
-            // }
-        } catch (error) {
-            console.log("Error uploading image: " + error);
+    const categories = useSelector((state) => {
+        return state.categories.categories;
+    });
+    const [images, setImages] = useState([]);
+    const [urls, setUrls] = useState([]);
+    const [progress, setProgress] = useState(0);
+
+    const handleChange = (e) => {
+        for (let i = 0; i < e.target.files.length; i++) {
+            const newImage = e.target.files[i];
+            newImage["id"] = Math.random();
+            setImages((prevState) => [...prevState, newImage]);
         }
     };
+
+    const handleUpload = () => {
+        const promises = [];
+        if (images.length > 0) {
+            images.map((image) => {
+                const storageRef = ref(storage, `images/${image.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, image);
+                promises.push(uploadTask);
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const progress = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+                        setProgress(progress);
+                    },
+                    (error) => {
+                        console.log(error);
+                    },
+                    async () => {
+                        await getDownloadURL(uploadTask.snapshot.ref).then(
+                            (downloadURLs) => {
+                                setUrls([downloadURLs]);
+                            }
+                        );
+                    }
+                );
+            });
+        }
+        Promise.all(promises)
+            .then(() => swal("All images uploaded"))
+            .catch((err) => console.log(err));
+    };
+
+    const handleCreateHome = (values) => {
+        let idUser = user.idUser;
+        let data = { ...values, image: urls[0], idUser: idUser };
+        dispatch(addHome(data)).then((values) => {
+            swal("Create Success !!!");
+            navigate("/");
+        });
+    };
+    useEffect(() => {
+        dispatch(getCategories());
+    }, []);
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <Box
-                    sx={{
-                        marginTop: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-
-                    <Typography component="h1" variant="h5">
-                        Create new home
-                    </Typography>
-                    <Box noValidate sx={{mt: 1}}>
-
-                        <form onSubmit={formik.handleSubmit}>
-                            <div>
-                                <div style={{display: "flex", justifyContent: "space-between"}} className='f'>
-                                    <TextField
-                                        margin="normal"
-                                        padding="5"
-                                        width="40%"
-                                        label="nameHome"
-                                        name="nameHome"
-                                        value={formik.values.nameHome}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.nameHome && Boolean(formik.errors.nameHome)}
-                                        helperText={formik.touched.nameHome && formik.errors.nameHome}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        width="40%"
-                                        label="address"
-                                        name="address"
-                                        value={formik.values.address}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.address && Boolean(formik.errors.address)}
-                                        helperText={formik.touched.address && formik.errors.address}
-                                    />
-                                </div>
-                                <div style={{display: "flex", justifyContent: "space-between"}}>
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="price"
-                                        name="price"
-                                        value={formik.values.price}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.price && Boolean(formik.errors.price)}
-                                        helperText={formik.touched.price && formik.errors.price}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="floorArea"
-                                        name="floorArea"
-                                        value={formik.values.floorArea}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.floorArea && Boolean(formik.errors.floorArea)}
-                                        helperText={formik.touched.floorArea && formik.errors.floorArea}
-                                    />
-                                </div>
-
-                                <div style={{display: "flex", justifyContent: "space-between"}}>
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="bedrooms"
-                                        name="bedrooms"
-                                        value={formik.values.bedrooms}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.bedrooms && Boolean(formik.errors.bedrooms)}
-                                        helperText={formik.touched.bedrooms && formik.errors.bedrooms}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="bathrooms"
-                                        name="bathrooms"
-                                        value={formik.values.bathrooms}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.bathrooms && Boolean(formik.errors.bathrooms)}
-                                        helperText={formik.touched.bathrooms && formik.errors.bathrooms}
-                                    />
-                                </div>
-                                <div style={{display: "flex", justifyContent: "space-between"}}>
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="description"
-                                        name="description"
-                                        value={formik.values.description}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.description && Boolean(formik.errors.description)}
-                                        helperText={formik.touched.description && formik.errors.description}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        fullWidth
-                                        label="status"
-                                        name="status"
-                                        value={formik.values.status}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.status && Boolean(formik.errors.status)}
-                                        helperText={formik.touched.status && formik.errors.status}
-                                    />
-
-                                </div>
-                                <>
-                                    <label htmlFor="upload-input">
-                                        <Button variant="contained" component="span">
-                                            Tải lên
-                                        </Button>
-                                    </label>
-
-                                    <Input
-                                        type="file"
-                                        onChange={handleUpload}
-                                        style={{display: "none"}}
-                                        id="upload-input"
-                                        multiple
-                                    />
-                                    <div >
-                                        {imageUrls.map((image, index) => (
-                                            <img src={image} style={{width: 'calc(25% - 10px)',margin: '5px'}}/>
-                                        ))}
-                                    </div>
-                                </>
-
-                                <div style={{display: 'none'}}>
-
-                                    <TextField
-                                        name="user"
-                                        value={formik.values.user}
-                                    />
-                                </div>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{mt: 3, mb: 2}}
-
+        <div className="row">
+            <div class="container-xxl py-5">
+                <div class="container">
+                    <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style={{maxWidth: "600px"}}>
+                        <h1 class="mb-3">Create Home</h1>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+                            <img className="position-relative rounded w-100 h-100" src={urls[0]} alt={urls[0]} />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="wow fadeInUp" data-wow-delay="0.5s">
+                                <Formik
+                                    initialValues={{
+                                        nameHome: "",
+                                        address: "",
+                                        description: "",
+                                        price: "",
+                                        floorArea: "",
+                                        bedrooms: "",
+                                        bathrooms: "",
+                                        idCategory: "",
+                                    }}
+                                    validationSchema={validateSchema}
+                                    onSubmit={(values) => {
+                                        handleCreateHome(values);
+                                    }}
                                 >
-                                    Create
-                                </Button>
+                                    <Form>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <Field type="text" class="form-control" name={'nameHome'} id="nameHome" placeholder="Home"/>
+                                                    <label for="nameHome">Home</label>
+                                                    <alert className="text-danger">
+                                                        <ErrorMessage name={"nameHome"}></ErrorMessage>
+                                                    </alert>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <Field type="text" class="form-control" name={'address'} id="address" placeholder="Address"/>
+                                                    <label for="address">Address</label>
+                                                    <alert className="text-danger">
+                                                        <ErrorMessage name={"address"}></ErrorMessage>
+                                                    </alert>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-floating">
+                                                    <Field as={'textarea'} class="form-control" name={'description'} id="description" placeholder="Description" style={{height: '150px'}}/>
+                                                    <label for="description">Description</label>
+                                                    <alert className="text-danger">
+                                                        <ErrorMessage name={"description"}></ErrorMessage>
+                                                    </alert>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-floating">
+                                                    <Field type="number" class="form-control" name={'price'} id="price" placeholder="Price"/>
+                                                    <label for="price">Price</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-floating">
+                                                    <Field type="number" class="form-control" name={'floorArea'} id="floorArea" placeholder="Floor Area"/>
+                                                    <label for="floorArea">Floor Area</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-floating">
+                                                    <Field type="number" class="form-control" name={'bedrooms'} id="bedrooms" placeholder="Number of Bedrooms"/>
+                                                    <label for="bedrooms">Number of Bedrooms</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-floating">
+                                                    <Field type="number" class="form-control" name={'bathrooms'} id="bathrooms" placeholder="Number of Bathrooms"/>
+                                                    <label for="bathrooms">Number of Bathrooms</label>
+                                                </div>
+                                            </div>
+                                            <div className="col-12">
+                                                <Field
+                                                    as="select"
+                                                    name={"idCategory"}
+                                                    className="form-control"
+                                                    id="idCategory"
+                                                >
+                                                    <option selected>Category</option>
+                                                    {categories !== undefined &&
+                                                        categories.map((item, index) => (
+                                                            <option value={item.idCategory}>
+                                                                {item.nameCategory}
+                                                            </option>
+                                                        ))}
+                                                </Field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="exampleFormControlFile1">
+                                                    <strong>Upload Image Here</strong>
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    class="form-control-file"
+                                                    id="exampleFormControlFile1"
+                                                    multiple
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-secondary w-100 py-3"
+                                                    onClick={() => dispatch(handleUpload)}
+                                                >
+                                                    Upload
+                                                </button>
+                                            </div>
+                                            <div class="col-12">
+                                                <button class="btn btn-primary w-100 py-3" type="submit">Add</button>
+                                            </div>
+                                        </div>
+                                    </Form>
+                                </Formik>
                             </div>
-                        </form>
-                        <Grid container>
-                            <Grid item>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
-        </ThemeProvider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

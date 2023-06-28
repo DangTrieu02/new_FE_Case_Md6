@@ -150,10 +150,15 @@ function Header() {
                 <SimpleBottomNavigation/>
             </div>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
+            <Dialog open={openDialog} onClose={handleCloseDialog} PaperProps={{
+                style: {
+                    width: 500, // Specify the desired width
+                    height: 310, // Specify the desired height
+                },
+            }}>
                 <DialogTitle>Select Search Option</DialogTitle>
                 <DialogContent className="dialog-content">
-                    <FormControl component="fieldset">
+                    <FormControl component="fieldset" style={{marginBottom: '20px'}}>
                         <RadioGroup
                             aria-label="searchOption"
                             name="searchOption"
@@ -179,13 +184,14 @@ function Header() {
                     </FormControl>
                     {searchOption === "name" ? (
                         <TextField
-                            label="Search by name"
+                            label="Home name"
                             variant="outlined"
                             value={searchValue}
                             onChange={handleChangeSearchValue}
+                            style={{margin: 35}}
                         />
                     ) : searchOption === "status" ? (
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset" style={{marginBottom: '20px', paddingLeft: 40}}>
                             <RadioGroup
                                 aria-label="searchStatus"
                                 name="searchStatus"
@@ -210,13 +216,15 @@ function Header() {
                             </RadioGroup>
                         </FormControl>
                     ) : (
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset"
+                                     style={{marginBottom: '20px', paddingLeft: 40, paddingTop: 10}}>
                             <TextField
                                 label="Minimum price"
                                 variant="outlined"
                                 name="min"
                                 value={searchPrice.min}
                                 onChange={handleChangeSearchPrice}
+                                style={{paddingBottom: 15}}
                             />
                             <TextField
                                 label="Maximum price"
@@ -228,7 +236,7 @@ function Header() {
                         </FormControl>
                     )}
                 </DialogContent>
-                <DialogActions>
+                <DialogActions style={{justifyContent: 'center', marginBottom: '10px'}}>
                     <Button
                         onClick={handleSearch}
                         variant="contained"

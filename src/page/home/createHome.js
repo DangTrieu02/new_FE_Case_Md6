@@ -22,7 +22,7 @@ export default function CreateHome() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const  idUser  = useSelector(({user})=>{
-        return user.currentUser.idUser
+        return user.currentUser
     })
     console.log(idUser)
     const categories = useSelector((state) => {
@@ -59,7 +59,7 @@ export default function CreateHome() {
     };
 
     const handleCreateHome = (values) => {
-        // let idUser = idUser;
+        let idUser = idUser.userId
         let data = { ...values, image: imageUrls, user: idUser };
 
         dispatch(addHome(data)).then((values) => {
@@ -101,6 +101,7 @@ export default function CreateHome() {
                                         floorArea: "",
                                         bedrooms: "",
                                         bathrooms: "",
+                                        status: "Waiting",
                                         category: "",
                                     }}
                                     validationSchema={validateSchema}

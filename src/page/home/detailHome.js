@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import './css/detail.css'
 import Header from '../../components/Header'
 import {useLocation, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {getHomeById} from '../../service/homeService';
 import Button from "@mui/material/Button";
+import {Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
+import Box from "@mui/material/Box";
 
 export default function DetailHome() {
     const dispatch = useDispatch();
@@ -12,6 +14,24 @@ export default function DetailHome() {
     const currentHome = useSelector(({home}) => {
         return home.currentHome
     })
+    const [open, setOpen] = useState(false);
+    const [checkInDate, setCheckInDate] = useState('');
+    const [checkOutDate, setCheckOutDate] = useState('');
+
+    const handleOpenDialog = () => {
+        setOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
+
+    const handleRentHome = () => {
+        // Perform validation and rental logic here
+        // You can access the checkInDate and checkOutDate states here
+        // and perform any necessary actions
+    };
+
     useEffect(() => {
         dispatch(getHomeById(id))
     }, [])
@@ -81,7 +101,7 @@ export default function DetailHome() {
                                         </li>
                                     </ul>
                                     <ul className="button">
-                                        <Button variant="outlined">Rent this home</Button>
+                                        <Button variant="outlined" onClick={handleOpenDialog}>Rent this home</Button>
                                     </ul>
                                     <ul className="social-icon-style2 ps-0">
                                         <li>
@@ -181,6 +201,50 @@ export default function DetailHome() {
                 </div>
 
             }
+            <Box component="form"
+                 sx={{
+                     '& .MuiTextField-root': { m: 1, width: '25ch' },
+                 }}
+                 noValidate
+                 autoComplete="off">
+                <Dialog open={open} onClose={handleCloseDialog} PaperProps={{
+                    style: {
+                        width: 450, // Specify the desired width
+                        height: 310, // Specify the desired height
+                    },
+                }}>
+                    <DialogTitle>Rent Home</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            label="Check-In Date"
+                            type="date"
+                            value={checkInDate}
+                            onChange={(e) => setCheckInDate(e.target.value)}
+                            variant="outlined"
+                            required
+                            style={{margin: 10}}
+
+                        />
+                        <TextField
+                            label="Check-Out Date"
+                            type="date"
+                            value={checkOutDate}
+                            onChange={(e) => setCheckOutDate(e.target.value)}
+                            variant="outlined"
+                            required
+                            style={{margin: 10}}
+
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog}>Cancel</Button>
+                        <Button onClick={handleRentHome} variant="contained" color="primary">
+                            Rent
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </Box>
+
         </>
 
     )

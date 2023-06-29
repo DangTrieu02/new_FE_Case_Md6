@@ -18,6 +18,7 @@ import Button from "@mui/material/Button";
 
 function HomePage() {
   console.log('day la home')
+
   const homes = useSelector(({ home }) => {
     return home.list
   })

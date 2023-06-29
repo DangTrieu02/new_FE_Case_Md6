@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -14,7 +12,6 @@ import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useFormik} from 'formik';
 import * as yup from 'yup';
-import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
 
@@ -64,7 +61,7 @@ const defaultTheme = createTheme();
 export default function Register({setIsLogin}) {
     const handleRegister = async (values) => {
         axios.post('http://localhost:3001/users/register', values).then((response) => {
-            if (response.status == 209) {
+            if (response.status === 209) {
                 swal({
                     title: "Register error",
                     text: response.data.message,

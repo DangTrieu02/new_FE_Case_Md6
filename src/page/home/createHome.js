@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { uploadBytes } from "firebase/storage";
 
 import { storage } from "./firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, getDownloadURL } from "firebase/storage";
 
 import { addHome } from "../../service/homeService";
 import { getCategories } from "../../service/categoryService";
@@ -21,9 +21,10 @@ const validateSchema = Yup.object().shape({
 export default function CreateHome() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector((state) => {
-        return state.user.currentUser;
-    });
+    const  idUser  = useSelector(({user})=>{
+        return user.currentUser.idUser
+    })
+    console.log(idUser)
     const categories = useSelector((state) => {
         return state.categories.categories;
     });
@@ -58,9 +59,9 @@ export default function CreateHome() {
     };
 
     const handleCreateHome = (values) => {
-        let idUser = user.idUser;
-        let data = { ...values, image: imageUrls, idUser: idUser };
-        console.log(data, 1111);
+        // let idUser = idUser;
+        let data = { ...values, image: imageUrls, user: idUser };
+
         dispatch(addHome(data)).then((values) => {
             swal("Create Success !!!");
             navigate("/");
@@ -92,6 +93,7 @@ export default function CreateHome() {
                             <div className="wow fadeInUp" data-wow-delay="0.5s">
                                 <Formik
                                     initialValues={{
+                                        user:idUser,
                                         nameHome: "",
                                         address: "",
                                         description: "",
@@ -99,12 +101,14 @@ export default function CreateHome() {
                                         floorArea: "",
                                         bedrooms: "",
                                         bathrooms: "",
-                                        idCategory: "",
+                                        category: "",
                                     }}
                                     validationSchema={validateSchema}
-                                    onSubmit={(values) => {
+                                    onSubmit={(values,{setFieldValue}) => {
+                                        setFieldValue("userId",idUser)
                                         handleCreateHome(values);
                                     }}
+
                                 >
                                     <Form>
                                         <div className="row g-3">
@@ -185,7 +189,7 @@ export default function CreateHome() {
                                                 </div>
                                             </div>
                                             <div className="col-12">
-                                                <Field as="select" name={"idCategory"} className="form-control" id="idCategory">
+                                                <Field as="select" name={"category"} className="form-control" id="idCategory">
                                                     <option selected>Category</option>
                                                     {categories !== undefined &&
                                                         categories.map((item, index) => (

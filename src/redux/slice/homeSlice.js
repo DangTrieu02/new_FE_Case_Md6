@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import { createSlice} from "@reduxjs/toolkit";
 import { addHome ,editHome, getAllCategory, getAllHome, getHomeById, getHomeByUser } from "../../service/homeService";
 import {
     getHomeByCategory,
@@ -7,7 +7,6 @@ import {
     getHomeByPrice,
     getHomeByStatus,
 } from "../../service/homeService";
-import customAxios from "../../service/api";
 
 const initialState = {
     list: [],

@@ -1,3 +1,4 @@
+// homeSlice.js
 import {createSlice} from "@reduxjs/toolkit";
 import {createHome, editHome, getAllCategory, getAllHome, getHomeById, getHomeByUser} from "../../service/homeService";
 import {

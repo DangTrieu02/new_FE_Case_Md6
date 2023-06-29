@@ -1,63 +1,38 @@
 // Filter.js
-
-import React, {useState} from "react";
-import {links} from "../../assets/images-links";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilter } from "../../redux/slice/homeSlice";
+import { getAllCategory, getHomeByCategory } from "../../service/homeService";
 import "./styles.css";
-import Box from "@mui/material/Box";
-import Tabs, {tabsClasses} from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 
-function Filter({selectedFilter, setSelectedFilter, onSearch, onSearchQueryChange}) {
-    const [searchQuery, setSearchQuery] = useState(""); // Define searchQuery state
+function Filter() {
+    const dispatch = useDispatch();
+    const [selectedFilter, setSelectedFilter] = useState("");
+    const categoryList = useSelector((state) => state.home.categoryList);
 
-    const handleChange = (event, newValue) => {
+    useEffect(() => {
+        dispatch(getAllCategory());
+    }, []);
+
+    const handleChange = async (event, newValue) => {
         setSelectedFilter(newValue);
-    };
-
-    const handleSearchQueryChange = (event) => {
-        onSearchQueryChange(event.target.value);
-    };
-
-    const handleSearch = (event) => {
-        event.preventDefault();
-        onSearch(event);
+        dispatch(setFilter({ category: newValue }));
+        await dispatch(getHomeByCategory(newValue));
     };
 
     return (
         <div className="filter-div">
-            <Box
-                sx={{
-                    flexGrow: 1,
-                    maxWidth: {xs: 150, sm: 1360},
-                    bgcolor: "background.paper",
-                }}
-            >
-                <Tabs
-                    value={selectedFilter}
-                    onChange={handleChange}
-                    variant="scrollable"
-                    scrollButtons
-                    aria-label="visible arrows tabs example"
-                    sx={{
-                        [`& .${tabsClasses.scrollButtons}`]: {
-                            "&.Mui-disabled": {opacity: 0.3},
-                        },
-                    }}
+            {categoryList.map((category) => (
+                <div
+                    key={category.idCategory}
+                    className={`links-box ${category.idCategory === selectedFilter && "selected-box"}`}
+                    onClick={(event) => handleChange(event, category.idCategory)}
                 >
-                    {links.map((item, i) => (
-                        <div
-                            key={i}
-                            className={`links-box ${i === selectedFilter && "selected-box"}`}
-                            onClick={() => setSelectedFilter(i)}
-                        >
-                            <img src={item.imgSrc} className="links-img" alt=""/>
-                            <p className={`links-label ${i === selectedFilter && "selected-label"}`}>
-                                <Tab label={item.label}/>
-                            </p>
-                        </div>
-                    ))}
-                </Tabs>
-            </Box>
+                    <p className={`links-label ${category.idCategory === selectedFilter && "selected-label"}`}>
+                        {category.nameCategory}
+                    </p>
+                </div>
+            ))}
         </div>
     );
 }

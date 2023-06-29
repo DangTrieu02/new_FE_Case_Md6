@@ -12,6 +12,7 @@ export default function DetailHome() {
     const dispatch = useDispatch();
     let { id } = useParams();
     const currentHome = useSelector(({ home }) => {
+        console.log(home.currentHome)
         return home.currentHome;
     });
     const [open, setOpen] = useState(false);
@@ -49,7 +50,7 @@ export default function DetailHome() {
 
     useEffect(() => {
         dispatch(getHomeById(id));
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         if (currentHome) {
@@ -58,6 +59,7 @@ export default function DetailHome() {
     }, [currentHome]);
 
     useEffect(() => {
+        if (currentHome)
         setTotalPrice(currentHome.price * days);
     }, [currentHome, days]);
 

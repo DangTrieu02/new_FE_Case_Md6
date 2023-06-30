@@ -29,17 +29,17 @@ export default function DetailHome() {
                                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
                                     </div>
                                     <div class="carousel-inner">
-                                        {currentHome.image.length < 2 ?
+                                        {currentHome.image && currentHome.image.length < 2 ?
                                             <div class="carousel-item active">
-                                                <img src={currentHome.image[0].image} class="d-block w-100" alt="..." />
+                                                <img src={currentHome.image && currentHome.image[0].image} class="d-block w-100" alt="..." />
                                             </div>
                                             :
                                             <>
                                                 <div class="carousel-item active">
-                                                    <img src={currentHome.image[0].image} class="d-block w-100" alt="..." />
+                                                    <img src={currentHome.image && currentHome.image[0].image} class="d-block w-100" alt="..." />
                                                 </div>
                                                 {
-                                                    currentHome.image.map((item, index) => (
+                                                    currentHome.image && currentHome.image.map((item, index) => (
                                                         index !== 0 &&
                                                         <div class="carousel-item">
                                                             <img src={item.image} class="d-block w-100" alt="..." />

@@ -98,7 +98,7 @@ export default function CreateHome() {
                                         floorArea: "",
                                         bedrooms: "",
                                         bathrooms: "",
-                                        status: "Waiting",
+                                        status: "",
                                         category: "",
                                     }}
                                     validationSchema={validateSchema}

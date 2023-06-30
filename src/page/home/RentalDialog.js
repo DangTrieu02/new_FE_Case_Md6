@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
     Button,
     Dialog,
@@ -8,10 +8,11 @@ import {
     DialogTitle,
     TextField,
 } from '@mui/material';
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/Grid';
+import Swal from 'sweetalert2';
 
 export default function RentalDialog() {
-    const currentHome = useSelector(({home}) => home.currentHome);
+    const currentHome = useSelector(({ home }) => home.currentHome);
     const [open, setOpen] = useState(false);
     const [checkInDate, setCheckInDate] = useState('');
     const [checkOutDate, setCheckOutDate] = useState('');
@@ -26,10 +27,30 @@ export default function RentalDialog() {
         setOpen(false);
     };
 
-    const handleRentHome = () => {
-        // Perform validation and rental logic here
-        // You can access the checkInDate, checkOutDate, and totalPrice states here
-        // and perform any necessary actions
+    const handleRentHome = async () => {
+        if (checkInDate && checkOutDate) {
+            const currentDate = new Date();
+            const startDate = new Date(checkInDate);
+            const endDate = new Date(checkOutDate);
+
+            if (startDate < currentDate) {
+                Swal.fire('Lỗi!', 'Ngày check-in không thể là ngày trong quá khứ.', 'error');
+            } else if (endDate < startDate) {
+                Swal.fire('Lỗi!', 'Ngày check-out không thể nhỏ hơn ngày check-in.', 'error');
+            } else if (endDate.getTime() === startDate.getTime()) {
+                Swal.fire('Lỗi!', 'Ngày check-out không được trùng ngày check-in.', 'error');
+            } else if (endDate < currentDate || endDate < startDate) {
+                Swal.fire('Lỗi!', 'Ngày check-out không thể là ngày trong quá khứ.', 'error');
+            } else {
+                // Thực hiện logic đặt phòng hoặc các hành động khác tại đây
+
+                Swal.fire('Thành công!', 'Thuê nhà thành công', 'success');
+
+                // Đóng dialog sau khi thực hiện logic thành công
+                await handleCloseDialog();
+            }
+            setOpen(false)
+        }
     };
 
     const calculateDays = () => {
@@ -80,13 +101,12 @@ export default function RentalDialog() {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                style={{margin:40}}
-
+                                style={{ margin: 40 }}
                             />
                         </Grid>
                         <Grid xs={6}>
                             <TextField
-                                style={{margin:40}}
+                                style={{ margin: 40 }}
                                 id="checkOutDate"
                                 label="Check-out Date"
                                 type="date"
@@ -95,12 +115,11 @@ export default function RentalDialog() {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-
                             />
                         </Grid>
                     </Grid>
                     <TextField
-                        style={{margin:20,justifyContent:"center",alignItems:"center"}}
+                        style={{ margin: 20, justifyContent: 'center', alignItems: 'center' }}
                         id="totalPrice"
                         label="Total Price"
                         type="text"
@@ -109,7 +128,9 @@ export default function RentalDialog() {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseDialog} color="error" variant="contained">Cancel</Button>
+                    <Button onClick={handleCloseDialog} color="error" variant="contained">
+                        Cancel
+                    </Button>
                     <Button onClick={handleRentHome} color="success" variant="contained">
                         Rent
                     </Button>

@@ -24,7 +24,6 @@ export default function CreateHome() {
     const  idUser  = useSelector(({user})=>{
         return user.currentUser
     })
-    console.log(idUser)
     const categories = useSelector((state) => {
         return state.categories.categories;
     });
@@ -59,9 +58,7 @@ export default function CreateHome() {
     };
 
     const handleCreateHome = (values) => {
-        let idUser = idUser.userId
         let data = { ...values, image: imageUrls, user: idUser };
-
         dispatch(addHome(data)).then((values) => {
             swal("Create Success !!!");
             navigate("/");
@@ -105,8 +102,7 @@ export default function CreateHome() {
                                         category: "",
                                     }}
                                     validationSchema={validateSchema}
-                                    onSubmit={(values,{setFieldValue}) => {
-                                        setFieldValue("userId",idUser)
+                                    onSubmit={values => {
                                         handleCreateHome(values);
                                     }}
 

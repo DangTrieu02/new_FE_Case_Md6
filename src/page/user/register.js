@@ -171,18 +171,18 @@ export default function Register({setIsLogin}) {
                                 />
                             </div>
 
-                            <div className='select-option'>
-                                <select
-                                    id="role"
-                                    name="role"
-                                    value={formik.values.role}
-                                    onChange={formik.handleChange}
-                                    required
-                                >
-                                    <option style={{color: "black"}} value="user">user</option>
-                                    <option style={{color: "black"}} value="owner">owner</option>
-                                </select>
-                            </div>
+                            {/*<div className='select-option'>*/}
+                            {/*    <select*/}
+                            {/*        id="role"*/}
+                            {/*        name="role"*/}
+                            {/*        value={formik.values.role}*/}
+                            {/*        onChange={formik.handleChange}*/}
+                            {/*        required*/}
+                            {/*    >*/}
+                            {/*        <option style={{color: "black"}} value="user">user</option>*/}
+                            {/*        <option style={{color: "black"}} value="owner">owner</option>*/}
+                            {/*    </select>*/}
+                            {/*</div>*/}
 
                             <div className="custom-select">
                                 <select

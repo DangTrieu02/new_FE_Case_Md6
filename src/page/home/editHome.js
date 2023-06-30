@@ -1,15 +1,9 @@
 import * as React from 'react';
-import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormik } from "formik";
@@ -20,6 +14,9 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { editHome, getHomeById } from '../../service/homeService';
 import swal from "sweetalert";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {storage} from "./firebase";
+import {useState} from "react";
 
 const validateSchema = Yup.object().shape({
     // username: Yup.string()
@@ -37,6 +34,10 @@ const validateSchema = Yup.object().shape({
 export default function EditHome() {
     const navigate = useNavigate()
     const dispatch = useDispatch();
+    const [imageUrls, setImageUrls] = useState([]);
+    const [uploadedImage, setUploadedImage] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
     let { id } = useParams()
     const currentHome = useSelector(({ home }) => {
         return home.currentHome
@@ -44,6 +45,29 @@ export default function EditHome() {
     React.useEffect(() => {
         dispatch(getHomeById(id))
     }, [])
+
+    const handleChange = async (e) => {
+        for (let i = 0; i < e.target.files.length; i++) {
+            const file = e.target.files[i];
+            const storageRef = ref(storage);
+            const timestamp = Date.now();
+            const fileRef = ref(storageRef, `${timestamp}_${file.name}`);
+            try {
+                if (uploadedImage.length < 4) {
+                    await uploadBytes(fileRef, file);
+                    const imageUrl = await getDownloadURL(fileRef);
+                    setImageUrls((prevUrls) => [...prevUrls, imageUrl]);
+                } else {
+                    setErrorMessage("limit 4 image");
+                    setSnackbarOpen(true);
+                }
+            } catch (error) {
+                console.log("Error uploading image: " + error);
+            }
+        }
+    };
+
+
     const handleEdit = async (values) => {
 
         await dispatch(editHome({ id: id, newHome: values })).then(() => {
@@ -56,6 +80,8 @@ export default function EditHome() {
             window.location.reload()
         });
     };
+
+
 
     const defaultTheme = createTheme()
 
@@ -88,13 +114,21 @@ export default function EditHome() {
 
                             <div className="row justify-content-center mt-2">
                                 <div className='col-9'>
-                                    <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />
+                                    {currentHome && currentHome.image && (
+                                        <img src={currentHome.image[0].image} className="d-block w-100 mb-4" alt="..." />
+                                    )}
                                 </div>
                                 <div className='col-3'>
-                                    <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />
-                                    <img src={currentHome.image[0].image} class="d-block w-100 mb-4" alt="..." />
-                                    <img src={currentHome.image[0].image} class="d-block w-100 mb-4 " alt="..." />
+                                    {currentHome && currentHome.image && (
+                                        <>
+                                            <img src={currentHome.image[1].image} className="d-block w-100 mb-4" alt="..." />
+                                            <img src={currentHome.image[2].image} className="d-block w-100 mb-4" alt="..." />
+                                        </>
+                                    )}
                                 </div>
+                                {imageUrls.map((item) => item && (
+                                    <img className="position-relative rounded w-100 mb-2" src={item} alt={""} />
+                                ))}
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -213,6 +247,21 @@ export default function EditHome() {
                                                                         />
                                                                         {/* {currentHome && <img src={currentHome.image[0].image} alt="" />} */}
                                                                     </div>
+
+                                                                    <div className="col-md-6">
+                                                                        <label htmlFor="exampleFormControlFile1">
+                                                                            <strong>Upload Image Here</strong>
+                                                                        </label>
+                                                                        <input
+                                                                            type="file"
+                                                                            className="form-control-file"
+                                                                            id="exampleFormControlFile1"
+                                                                            multiple
+                                                                            onChange={handleChange}
+                                                                        />
+                                                                    </div>
+
+
                                                                     <Button
                                                                         type="submit"
                                                                         fullWidth

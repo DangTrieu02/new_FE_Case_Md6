@@ -25,11 +25,18 @@ export const getHomeByUser = createAsyncThunk(`homes/getHomeByUser`,async(id)=>{
     return res.data
 });
 
-export const editHome = createAsyncThunk(`homes/editHome`,async(data)=>{
-    const res= await customAxios.put(`homes/${data.id}`,data.newHome)
-    console.log('Updated');
-    return res.data
+export const editHome = createAsyncThunk(`homes/editHome`, async (data) => {
+    try {
+        const res = await customAxios.put(`homes/${data.id}`, data.newHome);
+        console.log('Updated');
+        return res.data;
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        throw error;
+    }
 });
+
 export const getHomeById = createAsyncThunk(`homes/getHomeById`,async(id)=>{
     const res= await customAxios.get(`/homes/${id}`)
     return res.data

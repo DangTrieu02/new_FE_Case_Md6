@@ -55,17 +55,18 @@ const homeSlice = createSlice({
         builder.addCase(getHomeByUser.fulfilled, (state, action) => {
             state.userList = action.payload;
         });
-        builder.addCase(editHome.fulfilled,(state,action)=>{
-            state.userList = action.payload
-            for(let i=0; i<state.userList.length;i++){
-                if(state.userList[i] === action.payload.idHome){
-                    state.userList[i]={...action.payload}
-                    break;
+        builder.addCase(editHome.fulfilled, (state, action) => {
+            state.userList = state.userList.map((user) => {
+                if (user.idHome === action.payload.idHome) {
+                    return action.payload;
                 }
-            }
-        })
+                return user;
+            });
+        });
         builder.addCase(getHomeById.fulfilled, (state, action) => {
             state.currentHome = action.payload;
+        }).addCase(getHomeById.rejected, (state, action) => {
+            state.currentHome = null;
         });
         builder.addCase(getAllCategory.fulfilled,(state,action)=>{
             state.catgoryList = action.payload

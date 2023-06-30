@@ -59,8 +59,9 @@ export default function DetailHome() {
     }, [currentHome]);
 
     useEffect(() => {
-        if (currentHome)
-        setTotalPrice(currentHome.price * days);
+        if (currentHome && days > 0) {
+            setTotalPrice(currentHome.price * days);
+        }
     }, [currentHome, days]);
 
     return (
@@ -128,7 +129,9 @@ export default function DetailHome() {
                                         </li>
                                     </ul>
                                     <ul className="button">
-                                        <Button variant="outlined" onClick={handleOpenDialog}>Rent this home</Button>
+                                        <Button variant="contained"
+                                                onClick={handleOpenDialog}
+                                        >Rent this home</Button>
                                     </ul>
                                     <ul className="social-icon-style2 ps-0">
                                         <li>
@@ -273,15 +276,15 @@ export default function DetailHome() {
                             </div>
                             <div className="row" id="total-price" style={{paddingTop: 30}}>
                                 <div className='col-md-6'>
-                                    Total Price : {setTotalPrice}
+                                    Total Price : {totalPrice}
                                 </div>
                             </div>
 
                         </div>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCloseDialog}>Cancel</Button>
-                        <Button onClick={handleRentHome}>Rent</Button>
+                        <Button onClick={handleCloseDialog} color="error" variant="contained">Cancel</Button>
+                        <Button onClick={handleRentHome} color="success" variant="contained">Rent</Button>
                     </DialogActions>
                 </Dialog>
             </Box>

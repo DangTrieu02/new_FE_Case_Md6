@@ -1,72 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './css/detail.css';
 import Header from '../../components/Header';
-import { useLocation, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { getHomeById } from '../../service/homeService';
+import {useLocation, useParams} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {getHomeById} from '../../service/homeService';
 import Button from "@mui/material/Button";
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import {Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 import Box from "@mui/material/Box";
+import RentalDialog from "./RentalDialog";
 
 export default function DetailHome() {
     const dispatch = useDispatch();
     let { id } = useParams();
-    const currentHome = useSelector(({ home }) => {
-        console.log(home.currentHome)
-        return home.currentHome;
-    });
-    const [open, setOpen] = useState(false);
-    const [checkInDate, setCheckInDate] = useState('');
-    const [checkOutDate, setCheckOutDate] = useState('');
-    const [status, setStatus] = useState('');
-    const [days, setDays] = useState(0);
-    const [totalPrice, setTotalPrice] = useState(0);
-
-    const handleOpenDialog = () => {
-        setOpen(true);
-    };
-
-    const handleCloseDialog = () => {
-        setOpen(false);
-    };
-
-    const handleRentHome = () => {
-        // Perform validation and rental logic here
-        // You can access the checkInDate, checkOutDate, and totalPrice states here
-        // and perform any necessary actions
-    };
-
-    const calculateDays = () => {
-        if (checkInDate && checkOutDate) {
-            const startDate = new Date(checkInDate);
-            const endDate = new Date(checkOutDate);
-            const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
-            const numberOfDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            setDays(numberOfDays);
-        } else {
-            setDays(0);
-        }
-    };
+    const currentHome = useSelector(({ home }) => home.currentHome);
 
     useEffect(() => {
         dispatch(getHomeById(id));
-    }, [id]);
-
-    useEffect(() => {
-        if (currentHome) {
-            calculateDays();
-        }
-    }, [currentHome]);
-
-    useEffect(() => {
-        if (currentHome && days > 0) {
-            setTotalPrice(currentHome.price * days);
-        }
-    }, [currentHome, days]);
+    }, [dispatch, id]);
 
     return (
         <>
-            <Header />
+            <Header/>
             {currentHome &&
                 <div className="container">
                     <div className="row justify-content-center">
@@ -85,19 +39,19 @@ export default function DetailHome() {
                                     <div class="carousel-inner">
                                         {currentHome.image.length < 2 ?
                                             <div class="carousel-item active">
-                                                <img src={currentHome.image[0].image} class="d-block w-100" alt="..." />
+                                                <img src={currentHome.image[0].image} class="d-block w-100" alt="..."/>
                                             </div>
                                             :
                                             <>
                                                 <div class="carousel-item active">
                                                     <img src={currentHome.image[0].image} class="d-block w-100"
-                                                         alt="..." />
+                                                         alt="..."/>
                                                 </div>
                                                 {
                                                     currentHome.image.map((item, index) => (
                                                         index !== 0 &&
                                                         <div class="carousel-item">
-                                                            <img src={item.image} class="d-block w-100" alt="..." />
+                                                            <img src={item.image} class="d-block w-100" alt="..."/>
                                                         </div>
                                                     ))
                                                 }
@@ -123,35 +77,33 @@ export default function DetailHome() {
                                     <ul className="list-unstyled mb-4">
                                         <li className="mb-3">
                                             <a href="#!">
-                                                <i className="fas fa-mobile-alt display-25 me-3 text-secondary" />
+                                                <i className="fas fa-mobile-alt display-25 me-3 text-secondary"/>
                                                 (+84){currentHome.user.phoneNumber}
                                             </a>
                                         </li>
                                     </ul>
-                                    <ul className="button">
-                                        <Button variant="contained"
-                                                onClick={handleOpenDialog}
-                                        >Rent this home</Button>
+                                    <ul>
+                                        <RentalDialog/>
                                     </ul>
                                     <ul className="social-icon-style2 ps-0">
                                         <li>
                                             <a href="#!" className="rounded-3">
-                                                <i className="fab fa-facebook-f" />
+                                                <i className="fab fa-facebook-f"/>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#!" className="rounded-3">
-                                                <i className="fab fa-twitter" />
+                                                <i className="fab fa-twitter"/>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#!" className="rounded-3">
-                                                <i className="fab fa-youtube" />
+                                                <i className="fab fa-youtube"/>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#!" className="rounded-3">
-                                                <i className="fab fa-linkedin-in" />
+                                                <i className="fab fa-linkedin-in"/>
                                             </a>
                                         </li>
                                     </ul>
@@ -164,48 +116,58 @@ export default function DetailHome() {
                                     <div className="text-start mb-1-6 wow fadeIn">
                                         <h3 className="h1 mb-0 text-primary">About home</h3>
                                     </div>
-                                    <div style={{ display: "flex" }}>
-                                        <div style={{ flex: "1", marginRight: "10px" }}>
-                                            <div style={{ display: "flex", marginBottom: "10px", marginLeft: 20 }}>
+                                    <div style={{display: "flex"}}>
+                                        <div style={{flex: "1", marginRight: "10px"}}>
+                                            <div style={{display: "flex", marginBottom: "10px", marginLeft: 20}}>
                                                 <div style={{
                                                     flex: "1",
                                                     textAlign: "center",
                                                     marginRight: "10px",
                                                     padding: "10px"
                                                 }}>
-                                                    <img style={{ padding: "10px" }}
+                                                    <img style={{padding: "10px"}}
                                                          src='https://icons.iconarchive.com/icons/icons8/ios7/48/Household-Bed-icon.png'
-                                                         alt='' />Bedrooms: {currentHome.bedrooms}
+                                                         alt=''/>Bedrooms: {currentHome.bedrooms}
                                                 </div>
-                                                <div style={{ flex: "1", textAlign: "center", padding: "20px", marginLeft: 150 }}>
-                                                    <img style={{ width: "50px", height: "50px" }}
+                                                <div style={{
+                                                    flex: "1",
+                                                    textAlign: "center",
+                                                    padding: "20px",
+                                                    marginLeft: 150
+                                                }}>
+                                                    <img style={{width: "50px", height: "50px"}}
                                                          src='https://cdn2.iconfinder.com/data/icons/real-estate-225/1000/Real_Estate-11-512.png'
-                                                         alt='' />Floor Area: {currentHome.floorArea}
+                                                         alt=''/>Floor Area: {currentHome.floorArea}
                                                 </div>
                                             </div>
-                                            <div style={{ display: "flex" }}>
+                                            <div style={{display: "flex"}}>
                                                 <div style={{
                                                     flex: "1",
                                                     textAlign: "center",
                                                     marginRight: "10px",
                                                     padding: "10px"
                                                 }}>
-                                                    <img style={{ width: "50px", height: "50px", margin: 40 }}
+                                                    <img style={{width: "50px", height: "50px", margin: 40}}
                                                          src='https://th.bing.com/th/id/OIP.jckLGyz9I3ZVIaeBDNDVdgHaHW?w=178&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7'
-                                                         alt='' />Address: {currentHome.address}
+                                                         alt=''/>Address: {currentHome.address}
                                                 </div>
-                                                <div style={{ flex: "1", textAlign: "center", padding: "10px", margin: 60 }}>
-                                                    <img style={{ width: "50px", height: "50px" }}
+                                                <div style={{
+                                                    flex: "1",
+                                                    textAlign: "center",
+                                                    padding: "10px",
+                                                    margin: 60
+                                                }}>
+                                                    <img style={{width: "50px", height: "50px"}}
                                                          src='https://th.bing.com/th/id/OIP.OAkd_z4s0nggBrlorUFYXAHaHa?w=191&h=191&c=7&r=0&o=5&dpr=1.4&pid=1.7'
-                                                         alt='' />Bathrooms: {currentHome.bathrooms}
+                                                         alt=''/>Bathrooms: {currentHome.bathrooms}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div style={{ flex: "1" }}>
-                                            <div style={{ flex: "1", textAlign: "center", padding: "10px", margin: 40 }}>
-                                                <img style={{ width: "50px", height: "50px" }}
+                                        <div style={{flex: "1"}}>
+                                            <div style={{flex: "1", textAlign: "center", padding: "10px", margin: 40}}>
+                                                <img style={{width: "50px", height: "50px"}}
                                                      src='https://th.bing.com/th?q=Money+Icon+Vector&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.4&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=vi&adlt=moderate&t=1&mw=247'
-                                                     alt='' />Price: {currentHome.price}
+                                                     alt=''/>Price: {currentHome.price}
                                             </div>
                                         </div>
                                     </div>
@@ -227,67 +189,6 @@ export default function DetailHome() {
                     </div>
                 </div>
             }
-            <Box
-                component="form"
-                sx={{
-                    '& .MuiTextField-root': { m: 1, width: '25ch' },
-                }}
-                noValidate
-                autoComplete="off"
-            >
-                <Dialog
-                    open={open}
-                    onClose={handleCloseDialog}
-                    PaperProps={{
-                        style: {
-                            width: 450, // Specify the desired width
-                            height: 300, // Specify the desired height
-                        },
-                    }}
-                >
-                    <DialogTitle>Rent Home</DialogTitle>
-                    <DialogContent>
-                        <div className="container">
-                            <div className="row" id="check-in" style={{paddingTop: 10}}>
-                                <div className="col-md-6">
-                                    <TextField
-                                        id="checkInDate"
-                                        label="Check-in Date"
-                                        type="date"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        value={checkInDate}
-                                        onChange={(e) => setCheckInDate(e.target.value)}
-                                    />
-                                </div>
-                                <div className="col-md-6">
-                                    <TextField
-                                        id="checkOutDate"
-                                        label="Check-out Date"
-                                        type="date"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        value={checkOutDate}
-                                        onChange={(e) => setCheckOutDate(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row" id="total-price" style={{paddingTop: 30}}>
-                                <div className='col-md-6'>
-                                    Total Price : {totalPrice}
-                                </div>
-                            </div>
-
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseDialog} color="error" variant="contained">Cancel</Button>
-                        <Button onClick={handleRentHome} color="success" variant="contained">Rent</Button>
-                    </DialogActions>
-                </Dialog>
-            </Box>
         </>
     );
 }

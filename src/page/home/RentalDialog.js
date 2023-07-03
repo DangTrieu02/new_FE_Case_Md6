@@ -11,10 +11,13 @@ import {
 import Grid from "@mui/material/Grid";
 import Swal from "sweetalert2";
 import { rentHome } from "../../service/orderService";
+import {useNavigate} from "react-router-dom";
 
 export default function RentalDialog() {
   const currentHome = useSelector(({ home }) => home.currentHome);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Create a navigate function using useNavigate hook
+
   const [open, setOpen] = useState(false);
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
@@ -70,8 +73,15 @@ export default function RentalDialog() {
             checkOut: checkOutDate,
           })
         );
-        Swal.fire("Thành công!", "Thuê nhà thành công", "success");
-
+        Swal.fire({
+          icon: "success",
+          title: "Rent Home Successfully",
+          showConfirmButton: false,
+          timer: 2000, // Wait for 2 seconds
+        }).then(() => {
+          navigate("/");
+          window.location.reload();
+        });
         // Đóng dialog sau khi thực hiện logic thành công
         // await handleCloseDialog();
       }

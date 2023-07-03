@@ -1,4 +1,3 @@
-// Header/index.js
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/logo/long-logo.png";
 import "./styles.css";
@@ -31,6 +30,7 @@ import {
   getHomeByStatus,
   getHomeByPrice,
 } from "../../service/homeService";
+import StorageDialog from "./StorageDialog"; // Import the new StorageDialog component
 
 function Header() {
   const dispatch = useDispatch();
@@ -41,7 +41,6 @@ function Header() {
   const [searchValue, setSearchValue] = useState("");
   const [searchStatus, setSearchStatus] = useState("available");
   const [searchPrice, setSearchPrice] = useState({ min: "", max: "" });
-  const [homes, setHomes] = useState([]); // Define the homes array
 
   useEffect(() => {
     // Fetch the home data and update the homes array
@@ -49,7 +48,6 @@ function Header() {
       try {
         const response = await fetch("orders"); // Replace "your-api-url" with the actual API endpoint to fetch home data
         const data = await response.json();
-        console.log(data);
         setHomes(data); // Update the homes array with the fetched data
       } catch (error) {
         console.log(error);
@@ -58,6 +56,7 @@ function Header() {
 
     fetchHomes();
   }, []);
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -142,6 +141,8 @@ function Header() {
     // Handle cancel action
     handleCloseStorageDialog();
   };
+
+  const [homes, setHomes] = useState([]); // Define the homes array
 
   return (
     <>
@@ -253,11 +254,6 @@ function Header() {
                   label="Available"
                 />
                 <FormControlLabel
-                  value="hiring"
-                  control={<Radio />}
-                  label="Hiring"
-                />
-                <FormControlLabel
                   value="unavailable"
                   control={<Radio />}
                   label="Unavailable"
@@ -265,90 +261,44 @@ function Header() {
               </RadioGroup>
             </FormControl>
           ) : (
-            <FormControl
-              component="fieldset"
-              style={{ marginBottom: "20px", paddingLeft: 40, paddingTop: 10 }}
-            >
+            <div style={{ display: "flex", flexDirection: "column" }}>
               <TextField
                 label="Minimum price"
                 variant="outlined"
-                name="min"
                 value={searchPrice.min}
                 onChange={handleChangeSearchPrice}
-                style={{ paddingBottom: 15 }}
+                name="min"
+                style={{ margin: 35 }}
               />
               <TextField
                 label="Maximum price"
                 variant="outlined"
-                name="max"
                 value={searchPrice.max}
                 onChange={handleChangeSearchPrice}
+                name="max"
+                style={{ margin: 35 }}
               />
-            </FormControl>
+            </div>
           )}
         </DialogContent>
-        <DialogActions
-          style={{ justifyContent: "center", marginBottom: "10px" }}
-        >
-          <Button
-            onClick={handleSearch}
-            variant="contained"
-            style={{ backgroundColor: "deeppink" }}
-          >
-            Search
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog
-        open={openStorageDialog}
-        onClose={handleCloseStorageDialog}
-        PaperProps={{
-          style: {
-            width: 400,
-            height: 200,
-          },
-        }}
-      >
-        <DialogTitle>Storage</DialogTitle>
-        <DialogContent className="dialog-content">
-          {/* Display home details here */}
-          {homes.length > 0 ? (
-            homes.map((home) => (
-              <div key={home.id}>
-                <div>{home.name}</div>
-                <div>{home.description}</div>
-                <div>{home.price}</div>
-              </div>
-            ))
-          ) : (
-            <div>No home</div>
-          )}
-        </DialogContent>
-        <DialogActions
-          style={{ justifyContent: "center", marginBottom: "10px" }}
-        >
-          <Button
-            onClick={handlePaid}
-            variant="contained"
-            style={{ backgroundColor: "deeppink", marginRight: "10px" }}
-          >
-            Paid
-          </Button>
-          <Button
-            onClick={handleCancel}
-            variant="contained"
-            style={{ backgroundColor: "deeppink" }}
-          >
-            Cancel
-          </Button>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleSearch}>Search</Button>
         </DialogActions>
       </Dialog>
 
       <BasicModal
         openModal={openModal}
-        setOpenModal={setOpenModal}
+        handleCloseModal={handleCloseModal}
         handleCreateHome={handleCreateHome}
+      />
+
+      {/* Render the StorageDialog component */}
+      <StorageDialog
+        openStorageDialog={openStorageDialog}
+        handleCloseStorageDialog={handleCloseStorageDialog}
+        handlePaid={handlePaid}
+        handleCancel={handleCancel}
       />
     </>
   );

@@ -133,7 +133,7 @@ function Header() {
                         <div
                             className="airbnb-your-home"
                             onClick={handleOpenModal}
-                            style={{backgroundColor: "deeppink"}}
+                            style={{backgroundColor: "whitesmoke"}}
                         >
                             {" "}
                             Add your home here

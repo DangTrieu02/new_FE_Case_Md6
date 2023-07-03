@@ -40,10 +40,11 @@ export default function ChangePasswordDialog() {
                 throw new Error('No user found');
             }
             await axios.put(`http://localhost:3001/users/change-password/${currentUser.idUser}`, values);
+            handleClose();
             await Swal.fire('Success', 'Password changed successfully!', 'success');
             resetForm();
-            handleClose();
-            navigate('/home');
+
+            navigate('/');
         } catch (error) {
             console.log(error);
             Swal.fire('Error', 'Failed to change password', 'error');

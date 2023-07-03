@@ -12,7 +12,7 @@ const initialState = {
     list: [],
     userList: [],
     currentHome: null,
-    catgoryList:[],
+    categoryList: [],
     filters: {
         category: "",
         address: "",
@@ -68,8 +68,8 @@ const homeSlice = createSlice({
         }).addCase(getHomeById.rejected, (state, action) => {
             state.currentHome = null;
         });
-        builder.addCase(getAllCategory.fulfilled,(state,action)=>{
-            state.catgoryList = action.payload
+        builder.addCase(getAllCategory.fulfilled, (state, action) => {
+            state.categoryList = action.payload
         })
         builder.addCase(getHomeByCategory.fulfilled, (state, action) => {
             state.list = action.payload;

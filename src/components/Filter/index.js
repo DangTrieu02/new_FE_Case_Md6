@@ -8,7 +8,7 @@ import "./styles.css";
 function Filter() {
     const dispatch = useDispatch();
     const [selectedFilter, setSelectedFilter] = useState("");
-    const categoryList = useSelector((state) => state.home.categoryList);
+    const categoryList = useSelector(({categories}) =>  categories.categories );
 
     useEffect(() => {
         dispatch(getAllCategory());
@@ -22,18 +22,31 @@ function Filter() {
 
     return (
         <div className="filter-div">
-            {categoryList.map((category) => (
-                <div
-                    key={category.idCategory}
-                    className={`links-box ${category.idCategory === selectedFilter && "selected-box"}`}
-                    onClick={(event) => handleChange(event, category.idCategory)}
-                >
-                    <p className={`links-label ${category.idCategory === selectedFilter && "selected-label"}`}>
-                        {category.nameCategory}
-                    </p>
-                </div>
-            ))}
+            {console.log(categoryList, 111)}
+            {categoryList && categoryList.length > 0 ? (
+                categoryList.map((item) => (
+                    <div
+                        key={item.idCategory}
+                        className={`links-box ${
+                            item.idCategory === selectedFilter ? "selected-box" : ""
+                        }`}
+                        onClick={(event) => handleChange(event, item.idCategory)}
+                    >
+                        <img src={item.icon} style={{width: 40, height : 40}} alt="" />
+                        <p
+                            className={`links-label ${
+                                item.idCategory === selectedFilter ? "selected-label" : ""
+                            }`}
+                        >
+                            {item.nameCategory}
+                        </p>
+                    </div>
+                ))
+            ) : (
+                <p>No categories available.</p>
+            )}
         </div>
+
     );
 }
 

@@ -4,6 +4,7 @@ import Header from '../../components/Header'
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHomeById } from '../../service/homeService';
+import RentalDialog from "./RentalDialog";
 export default function DetailHome() {
     const dispatch = useDispatch();
     let { id } = useParams()
@@ -71,7 +72,9 @@ export default function DetailHome() {
                                             </a>
                                         </li>
                                     </ul>
+                                    <ul><RentalDialog/></ul>
                                     <ul className="social-icon-style2 ps-0">
+
                                         <li>
                                             <a href="#!" className="rounded-3">
                                                 <i className="fab fa-facebook-f" />

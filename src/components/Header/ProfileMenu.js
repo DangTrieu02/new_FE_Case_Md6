@@ -108,9 +108,9 @@ export default function BasicMenu({ user }) {
                         width: "100%"
                     }}
                 />
-                <MenuItem onClick={handleClose} className="menu-items">
-                    Host an experience
-                </MenuItem>
+                {/*<MenuItem onClick={handleClose} className="menu-items">*/}
+                {/*    Host an experience*/}
+                {/*</MenuItem>*/}
                 {user && (
                     <>
                         <MenuItem className="menu-items">

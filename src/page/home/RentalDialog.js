@@ -40,38 +40,38 @@ export default function RentalDialog() {
 
       if (startDate < currentDate) {
         Swal.fire(
-          "Lỗi!",
-          "Ngày check-in không thể là ngày trong quá khứ.",
-          "error"
+            "Lỗi!",
+            "Ngày check-in không thể là ngày trong quá khứ.",
+            "error"
         );
       } else if (endDate < startDate) {
         Swal.fire(
-          "Lỗi!",
-          "Ngày check-out không thể nhỏ hơn ngày check-in.",
-          "error"
+            "Lỗi!",
+            "Ngày check-out không thể nhỏ hơn ngày check-in.",
+            "error"
         );
       } else if (endDate.getTime() === startDate.getTime()) {
         Swal.fire(
-          "Lỗi!",
-          "Ngày check-out không được trùng ngày check-in.",
-          "error"
+            "Lỗi!",
+            "Ngày check-out không được trùng ngày check-in.",
+            "error"
         );
       } else if (endDate < currentDate || endDate < startDate) {
         Swal.fire(
-          "Lỗi!",
-          "Ngày check-out không thể là ngày trong quá khứ.",
-          "error"
+            "Lỗi!",
+            "Ngày check-out không thể là ngày trong quá khứ.",
+            "error"
         );
       } else {
         // Thực hiện logic đặt phòng hoặc các hành động khác tại đây
         console.log(currentHome.idHome);
         console.log(checkInDate, checkOutDate);
         dispatch(
-          rentHome({
-            idHome: currentHome.idHome,
-            checkIn: checkInDate,
-            checkOut: checkOutDate,
-          })
+            rentHome({
+              idHome: currentHome.idHome,
+              checkIn: checkInDate,
+              checkOut: checkOutDate,
+            })
         );
         Swal.fire({
           icon: "success",
@@ -113,72 +113,72 @@ export default function RentalDialog() {
   }, [checkInDate, checkOutDate, currentHome, days]);
 
   return (
-    <>
-      <Dialog
-        open={open}
-        onClose={handleCloseDialog}
-        PaperProps={{
-          style: {
-            width: 550, // Specify the desired width
-            height: 380, // Specify the desired height
-          },
-        }}
-      >
-        <DialogTitle>Rent Home</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2}>
-            <Grid xs={6}>
-              <TextField
-                id="checkInDate"
-                label="Check-in Date"
-                type="date"
-                value={checkInDate}
-                onChange={(e) => setCheckInDate(e.target.value)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                style={{ margin: 40 }}
-              />
-            </Grid>
-            <Grid xs={6}>
-              <TextField
-                style={{ margin: 40 }}
-                id="checkOutDate"
-                label="Check-out Date"
-                type="date"
-                value={checkOutDate}
-                onChange={(e) => setCheckOutDate(e.target.value)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-          </Grid>
-          <TextField
-            style={{
-              margin: 20,
-              justifyContent: "center",
-              alignItems: "center",
+      <>
+        <Dialog
+            open={open}
+            onClose={handleCloseDialog}
+            PaperProps={{
+              style: {
+                width: 550, // Specify the desired width
+                height: 380, // Specify the desired height
+              },
             }}
-            id="totalPrice"
-            label="Total Price"
-            type="text"
-            value={totalPrice}
-            disabled
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="error" variant="contained">
-            Cancel
-          </Button>
-          <Button onClick={handleRentHome} color="success" variant="contained">
-            Rent
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Button variant="outlined" onClick={handleOpenDialog}>
-        Rent Home
-      </Button>
-    </>
+        >
+          <DialogTitle>Rent Home</DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2}>
+              <Grid xs={6}>
+                <TextField
+                    id="checkInDate"
+                    label="Check-in Date"
+                    type="date"
+                    value={checkInDate}
+                    onChange={(e) => setCheckInDate(e.target.value)}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    style={{ margin: 40 }}
+                />
+              </Grid>
+              <Grid xs={6}>
+                <TextField
+                    style={{ margin: 40 }}
+                    id="checkOutDate"
+                    label="Check-out Date"
+                    type="date"
+                    value={checkOutDate}
+                    onChange={(e) => setCheckOutDate(e.target.value)}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                />
+              </Grid>
+            </Grid>
+            <TextField
+                style={{
+                  margin: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                id="totalPrice"
+                label="Total Price"
+                type="text"
+                value={totalPrice}
+                disabled
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="error" variant="contained">
+              Cancel
+            </Button>
+            <Button onClick={handleRentHome} color="success" variant="contained">
+              Rent
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Button variant="outlined" onClick={handleOpenDialog}>
+          Rent Home
+        </Button>
+      </>
   );
 }

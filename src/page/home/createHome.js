@@ -189,7 +189,9 @@ export default function CreateHome() {
                                                     <option selected>Category</option>
                                                     {categories !== undefined &&
                                                         categories.map((item, index) => (
-                                                            <option value={item.idCategory}>{item.nameCategory}</option>
+
+                                                            <option value={item.idCategory}>{item.nameCategory} <img
+                                                                src={item.icon} alt=""/></option>
                                                         ))}
                                                 </Field>
                                             </div>

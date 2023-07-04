@@ -13,7 +13,6 @@ import Swal from "sweetalert2";
 function StorageDialog({openStorageDialog, handleCloseStorageDialog, handleCancel}) {
     const dispatch = useDispatch();
     const orderList = useSelector((state) => state.order.order);
-
     useEffect(() => {
         dispatch(getRentedHome());
     }, []);
@@ -50,8 +49,8 @@ function StorageDialog({openStorageDialog, handleCloseStorageDialog, handleCance
             onClose={handleCloseStorageDialog}
             PaperProps={{
                 style: {
-                    width: 900,
-                    height: 500,
+                    minWidth: 1200,
+                    height: "auto",
                 },
             }}
         >
@@ -61,28 +60,30 @@ function StorageDialog({openStorageDialog, handleCloseStorageDialog, handleCance
                 <table className="table">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Name Home</th>
                         <th scope="col">Address</th>
                         <th scope="col">Check In Date</th>
                         <th scope="col">Check Out Date</th>
-                        <th colSpan={2}>Action</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">total</th>
+                        <th colSpan={2} style={{justifyContent: "center", paddingLeft:100}}>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {orderList &&
                         orderList.map((item) => (
                             <tr key={item.id}>
-                                <th scope="row">{item.id}</th>
                                 <td>{item.home.nameHome}</td>
                                 <td>{item.home.address}</td>
                                 <td>{item.checkIn}</td>
                                 <td>{item.checkOut}</td>
+                                <td><img src={item.home.image[0].image} style={{width:50,height:50}} alt=""/></td>
+                                <td></td>
                                 <td>
                                     {item.status === "waiting" ?
                                         <td style={{display: "flex", padding: 20, justifyContent: "space-evenly"}}>
-                                            <button onClick={() => handlePaidClick(item.id)}>Paid</button>
-                                            <button>Delete</button>
+                                            <button className={"btn btn-success"} onClick={() => handlePaidClick(item.id)}>Paid</button>
+                                            <button className={"btn btn-danger"}>Delete</button>
                                         </td> :
                                         <button onClick={() => handleCheckoutClick(item.id)}> Check Out </button>}
                                 </td>

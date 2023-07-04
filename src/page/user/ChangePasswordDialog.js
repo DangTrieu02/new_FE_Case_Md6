@@ -10,6 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import MenuItem from "@mui/material/MenuItem";
 
 const ChangePasswordSchema = Yup.object().shape({
     currentPassword: Yup.string().required('Old Password is required'),
@@ -53,9 +54,9 @@ export default function ChangePasswordDialog() {
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <MenuItem variant="outlined" onClick={handleClickOpen}>
                 Change Password
-            </Button>
+            </MenuItem>
 
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Change Password</DialogTitle>
